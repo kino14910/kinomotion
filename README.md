@@ -2,11 +2,11 @@
 
 <div align="center">
 
-  **Kino's Blog**
+**Kino's Blog**
 
-  A personal blog built with Astro, Svelte and TypeScript
+A personal blog built with Astro, Svelte and TypeScript
 
-  [![Astro](https://img.shields.io/badge/Astro-5.17.1-FF5D01?style=flat&logo=astro)](https://astro.build/) [![Svelte](https://img.shields.io/badge/Svelte-5.53.7-FF3E00?style=flat&logo=svelte)](https://svelte.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Astro](https://img.shields.io/badge/Astro-5.17.1-FF5D01?style=flat&logo=astro)](https://astro.build/) [![Svelte](https://img.shields.io/badge/Svelte-5.53.7-FF3E00?style=flat&logo=svelte)](https://svelte.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 
 </div>
 
@@ -94,8 +94,8 @@ npm run preview
 
 ```markdown
 ---
-title: "文章标题"
-description: "文章描述"
+title: '文章标题'
+description: '文章描述'
 pubDate: 2024-01-01
 updatedDate: 2024-01-02
 heroImage: ./cover.jpg
@@ -110,10 +110,10 @@ heroImage: ./cover.jpg
 
 ```markdown
 ---
-title: "笔记标题"
-description: "笔记描述"
+title: '笔记标题'
+description: '笔记描述'
 pubDate: 2024-01-01
-tags: ["标签1", "标签2"]
+tags: ['标签1', '标签2']
 ---
 
 笔记内容...
@@ -129,7 +129,7 @@ MIT License
 
 ## 👤 作者
 
-Kino - [GitHub](https://github.com/yourusername)
+Kino - [GitHub](https://github.com/kino14910)
 
 ---
 
