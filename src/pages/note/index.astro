@@ -10,11 +10,11 @@ const posts = (await getCollection('note')).sort(
 )
 ---
 
-<PostGrid 
-  title={title} 
+<PostGrid
+  title={title}
   description={description}
   posts={posts}
-  basePath="note"
+  basePath='note'
   showImage={false}
   showDate={false}
 />

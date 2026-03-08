@@ -180,7 +180,7 @@
   .home-wavy-lines {
     position: relative;
     max-width: 100dvw;
-    height: 80dvh;
+    height: 60dvh;
     background-color: var(--bg-color);
     overflow: hidden;
   }

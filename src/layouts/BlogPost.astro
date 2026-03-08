@@ -1,7 +1,7 @@
 ---
 import heroImagePlaceholder from '@/assets/cg_rm18_0103.webp'
 import BackToTop from '@/components/BackToTop.svelte'
-import FormattedDate from '@/components/FormattedDate.astro'
+import FormattedDate from '@/components/FormattedDate.svelte'
 import type { MarkdownHeading } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 import Layout from './Layout.astro'
@@ -25,7 +25,7 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
   <main>
     {
       headings && (
-        <aside>
+        <aside class='contents'>
           <h2>目录</h2>
           <nav class='toc' id='toc'>
             <ul>
@@ -64,7 +64,7 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
               )
             }
           </div>
-          <h1>{title}</h1>
+          <h1 data-text={title}>{title}</h1>
           <hr />
         </div>
         <slot />
@@ -147,8 +147,7 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
 
 <style>
   main {
-    width: calc(100% - 2em);
-    max-width: 100%;
+    max-width: calc(100% - 2em);
     margin: 0;
     flex: 1;
     display: flex;
@@ -164,8 +163,8 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     border-radius: 12px;
   }
   .prose {
-    width: 720px;
-    max-width: calc(100% - 2em);
+    width: 100dvw;
+    max-width: 720px;
     margin: auto;
     padding: 1em;
     color: var(--text-main);
@@ -177,6 +176,7 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     line-height: 1;
   }
   .title h1 {
+    position: relative;
     margin: 0 0 0.5em 0;
   }
   .date {
@@ -244,8 +244,13 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     font-weight: 500;
   }
   @media (max-width: 1024px) {
+    .contents,
     .toc {
       display: none;
+    }
+
+    main {
+      max-width: 100dvw;
     }
   }
 

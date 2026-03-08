@@ -1,5 +1,6 @@
 ---
 import PostGrid from '@/components/PostGrid.astro'
+import Rays from '@/components/Rays.svelte'
 import { getCollection } from 'astro:content'
 
 const title = 'Blog'
@@ -10,11 +11,26 @@ const posts = (await getCollection('blog')).sort(
 )
 ---
 
-<PostGrid 
-  title={title} 
+<PostGrid
+  title={title}
   description={description}
   posts={posts}
-  basePath="blog"
+  basePath='blog'
   showImage={true}
   showDate={true}
 />
+
+<div class='rays-container'>
+  <Rays client:only />
+</div>
+<style>
+  .rays-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100svh;
+    z-index: -1;
+    overflow: hidden;
+  }
+</style>

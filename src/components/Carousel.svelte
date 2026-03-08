@@ -144,7 +144,7 @@
   role="main"
 >
   <div class="home-photos-container">
-    <h4 class="banner">PHOTOS</h4>
+    <h4 class="banner">POKER</h4>
     <div class="home-photos-plates" bind:this={container}>
       {#each cards as card, index (card.id)}
         <div
@@ -200,8 +200,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
     overflow: hidden;
   }
 
@@ -309,5 +309,20 @@
   .arrow-wrapper svg {
     width: 100%;
     height: 100%;
+  }
+
+  @media screen and (max-width: 520px) {
+    .home-photos {
+      height: 60dvh;
+    }
+    .home-photos-container,
+    .home-photos-plates {
+      width: 23rem;
+    }
+    .poker,
+    .poker-top {
+      width: 10rem;
+      height: 13rem;
+    }
   }
 </style>

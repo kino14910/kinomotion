@@ -71,6 +71,10 @@ html {
   overflow-y: scroll;
 }
 
+html.lenis {
+  scrollbar-width: none;
+}
+
 @supports (scrollbar-gutter: stable) {
   html {
     overflow-y: auto;
@@ -182,7 +186,6 @@ img {
   max-width: 100%;
   height: auto;
   pointer-events: none;
-  -webkit-user-drag: none;
 }
 
 img,
@@ -190,6 +193,7 @@ img,
 a * {
   user-select: none;
   -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
 hr {
@@ -318,7 +322,7 @@ td {
 
 @media screen and (max-aspect-ratio: 3 / 2) {
   * {
-    font-size: 1vmax;
+    font-size: 1.5vmax;
   }
 }
 

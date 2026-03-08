@@ -1,11 +1,8 @@
-
 ---
 import Footer from '@/components/Footer.astro'
 import Head from '@/components/Head.astro'
 import Header from '@/components/Header.astro'
-import heroImage from '@/assets/cg_rm18_0103.webp'
-import FormattedDate from '@/components/FormattedDate.astro'
-import { Image } from 'astro:assets'
+import BlogLink from './BlogLink.svelte'
 
 export interface Props {
   title: string
@@ -23,7 +20,14 @@ export interface Props {
   showDate?: boolean
 }
 
-const { title, description, posts, basePath, showImage = true, showDate = true } = Astro.props
+const {
+  title,
+  description,
+  posts,
+  basePath,
+  showImage = true,
+  showDate = true,
+} = Astro.props
 ---
 
 <html lang='en'>
@@ -40,7 +44,7 @@ const { title, description, posts, basePath, showImage = true, showDate = true }
             {
               posts.map(post => (
                 <li>
-                  <a href={`/${basePath}/${post.id}/`}>
+                  {/* <a href={`/${basePath}/${post.id}/`}>
                     {showImage && (
                       <Image
                         width={720}
@@ -55,7 +59,13 @@ const { title, description, posts, basePath, showImage = true, showDate = true }
                         <FormattedDate date={post.data.pubDate} />
                       </p>
                     )}
-                  </a>
+                  </a> */}
+                  <BlogLink
+                    url='`/${basePath}/${post.id}/`'
+                    title={post.data.title}
+                    showDate={showDate}
+                    pubDate={post.data.pubDate}
+                  />
                 </li>
               ))
             }
@@ -105,22 +115,6 @@ const { title, description, posts, basePath, showImage = true, showDate = true }
   ul li img {
     margin-bottom: 0.5rem;
     border-radius: 12px;
-  }
-  ul li a {
-    display: block;
-  }
-  .title {
-    margin: 0;
-    color: var(--text-main);
-    line-height: 1;
-  }
-  .date {
-    margin: 0;
-    color: var(--primary-gray);
-  }
-  ul li a:hover h6,
-  ul li a:hover .date {
-    color: var(--primary);
   }
   @media (max-width: 720px) {
     ul {
