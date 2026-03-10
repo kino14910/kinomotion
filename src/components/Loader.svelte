@@ -69,7 +69,7 @@
     inset: 0;
     width: 100%;
     height: 100vh;
-    background-color: var(--bg-color, #aefff7);
+    background-color: var(--bg-color);
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -78,7 +78,7 @@
   }
 
   .loader-inner {
-    color: var(--primary, #7a30cf);
+    color: var(--primary);
   }
 
   .logo-svg {
