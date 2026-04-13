@@ -4,16 +4,22 @@ import Nav from './Nav.astro'
 ---
 
 <script>
-  const header = document.querySelector('header')
-  if (header) {
-    window.addEventListener('scroll', () => {
+  function handleHeaderScroll() {
+    const header = document.querySelector('header')
+    if (header) {
       if (window.scrollY > 50) {
-        header?.classList.add('scrolled')
+        header.classList.add('scrolled')
       } else {
-        header?.classList.remove('scrolled')
+        header.classList.remove('scrolled')
       }
-    })
+    }
   }
+
+  window.addEventListener('scroll', handleHeaderScroll, { passive: true })
+
+  document.addEventListener('astro:page-load', () => {
+    handleHeaderScroll()
+  })
 </script>
 
 <div class='header-placeholder'></div>

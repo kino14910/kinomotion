@@ -226,7 +226,7 @@
 
   .a__line {
     fill: none;
-    stroke: var(--text-secondary);
+    stroke: var(--text-main);
     stroke-width: 1px;
   }
 </style>

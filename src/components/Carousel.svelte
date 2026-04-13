@@ -221,7 +221,7 @@
     font-weight: 400;
     color: transparent;
     letter-spacing: 0.15rem;
-    -webkit-text-stroke: 0.15rem var(--primary-dark);
+    -webkit-text-stroke: 0.15rem var(--primary);
     transform: scaleY(70%);
   }
 
@@ -287,8 +287,8 @@
     position: absolute;
     width: 3rem;
     height: 3rem;
-    background-color: #410030;
-    color: white;
+    background-color: var(--on-primary-fixed);
+    color: var(--on-primary);
     border-radius: 50%;
     animation: arrow-move 1.5s infinite ease-in-out;
     filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.5));

@@ -1,5 +1,5 @@
 <script lang="ts">
-  let visible = false
+  let visible = $state(false)
 
   function handleScroll() {
     visible = window.scrollY > 100
@@ -11,11 +11,9 @@
       behavior: 'smooth',
     })
   }
-
-  if (typeof window !== 'undefined') {
-    addEventListener('scroll', handleScroll)
-  }
 </script>
+
+<svelte:window onscroll={handleScroll} />
 
 <button
   class="back-to-top"

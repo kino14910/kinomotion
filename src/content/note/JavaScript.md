@@ -927,6 +927,51 @@ console.log(myFriend.__proto__ === GoodFriend.prototype) //true
 
 
 
+#### null == undefined
+
+`==`（抽象相等）有一条**专门规则**： **`null` 只和 `undefined` 相等，且互相相等。**
+
+```javascript
+null == undefined  // true
+null == null       // true
+undefined == undefined // true
+```
+
+但：
+
+```javascript
+null == 0      // false
+undefined == 0 // false
+null == false  // false
+```
+
+ 也就是说：
+
+> **`null` 和 `undefined` 是一组“特殊绑定”的值**
+
+`==` 的比较规则（ECMAScript Abstract Equality Comparison）里有一条：
+
+```
+如果 x 是 null 且 y 是 undefined → 返回 true  
+如果 x 是 undefined 且 y 是 null → 返回 true
+```
+
+> 这是一条**硬编码规则**，不是推导出来的。
+
+```javascript
+if (a == null)
+```
+
+等价于：
+
+```javascript
+if (a === null || a === undefined)
+```
+
+ 因为 `a == null` 会触发：`a === null` 或  `a === undefined`
+
+
+
 #### HTML DOM 中事件传播方式：冒泡和捕获。
 
 事件传播允许定义事件发生时的元素顺序。如果 <div> 元素内有一个 <p> 元素，并且用户点击了 <p> 元素，那么应该首先处理哪个元素的“点击”事件？

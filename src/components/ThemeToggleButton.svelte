@@ -63,3 +63,41 @@
     {/if}
   </button>
 </div>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.33em 0.67em;
+    margin-left: 10px;
+    border-radius: 99em;
+    background-color: transparent;
+  }
+
+  .theme-button {
+    color: var(--on-surface-variant);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0.5em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+  }
+
+  .theme-button:hover {
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  .theme-button:focus {
+    outline: 2px solid transparent;
+  }
+
+  .theme-button svg {
+    width: 20px;
+    height: 20px;
+  }
+</style>

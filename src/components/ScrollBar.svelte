@@ -150,7 +150,7 @@
     --scrollbar-width: 16px;
     --thumb-visible-width: 8px;
     --thumb-bg: rgba(136, 136, 136, 0.4);
-    --thumb-bg-active: #555;
+    --thumb-bg-active: var(--outline);
 
     position: fixed;
     right: 0;
