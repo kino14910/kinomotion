@@ -10,7 +10,6 @@
 
 <style>
   .home-welcome {
-    flex: 1;
     margin: 0 auto;
     max-width: 1400px;
     padding: 1em 2em;
@@ -34,7 +33,7 @@
     right: 0%;
     top: 0%;
     bottom: 0%;
-    z-index: -1;
+    z-index: -9;
   }
   .home-container {
     align-items: center;

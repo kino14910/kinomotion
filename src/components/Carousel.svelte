@@ -202,7 +202,8 @@
     align-items: center;
     width: 100dvw;
     height: 100dvh;
-    overflow: hidden;
+    /* overflow: hidden; */
+    isolation: isolate;
   }
 
   .home-photos-container {
@@ -252,6 +253,7 @@
   }
 
   .poker.dragging {
+    position: absolute;
     cursor: grabbing;
     z-index: 1000 !important;
   }

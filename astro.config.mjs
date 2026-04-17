@@ -12,7 +12,7 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), svelte()],
   markdown: {
     shikiConfig: {
-      theme: 'nord',
+      theme: 'dark-plus',
     },
     remarkPlugins: [remarkGfm, remarkSmartypants],
     rehypePlugins: [
