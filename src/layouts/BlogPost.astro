@@ -258,19 +258,19 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
   .toc a {
     display: block;
     padding: 0.2em 0.4em;
-    color: var(--text-secondary);
+    color: var(--on-secondary-container);
     text-decoration: none;
     /* border-radius: 4px; */
     transition: all 0.2s ease;
     border-left: 3px solid transparent;
   }
   .toc a:hover {
-    background: var(--primary-light);
-    color: var(--primary-dark);
+    background: var(--secondary-fixed);
+    color: var(--on-secondary-fixed);
   }
   .toc a.active {
-    background-color: var(--primary-gray);
-    color: var(--primary-dark);
+    background: var(--secondary-container);
+    color: var(--on-secondary-container);
     border-left-color: var(--primary-dark);
     font-weight: 500;
   }
