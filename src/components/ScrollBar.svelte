@@ -117,10 +117,14 @@
 />
 
 <div
-  class="track-container"
-  class:is-active={isDragging || isScrolling || isHovered}
-  class:hover-show={hoverToShow}
-  class:hide={hideTrack}
+  class={[
+    'track-container',
+    {
+      'is-active': isDragging || isScrolling || isHovered,
+      'hover-show': hoverToShow,
+      hide: hideTrack,
+    },
+  ]}
   onmouseenter={() => (isHovered = true)}
   onmouseleave={() => (isHovered = false)}
   role="scrollbar"
@@ -131,8 +135,7 @@
 >
   <div class="track">
     <div
-      class="thumb"
-      class:no-transition={isScrolling || isDragging}
+      class={['thumb', { 'no-transition': isScrolling || isDragging }]}
       onmousedown={onDragStart}
       ontouchstart={onDragStart}
       style="height: {thumbHeight}px; transform: translateY({thumbTop}px);"

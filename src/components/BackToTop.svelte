@@ -16,8 +16,7 @@
 <svelte:window onscroll={handleScroll} />
 
 <button
-  class="back-to-top"
-  class:visible
+  class={['back-to-top', { visible }]}
   onclick={scrollToTop}
   aria-label="回到顶部"
 >

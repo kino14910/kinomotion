@@ -148,8 +148,7 @@
     <div class="home-photos-plates" bind:this={container}>
       {#each cards as card, index (card.id)}
         <div
-          class="poker"
-          class:dragging={card.dragging}
+          class={['poker', { dragging: card.dragging }]}
           role="img"
           style:--poker-transform={transformDatas[card.nums]}
           style:z-index={card.nums}
@@ -222,7 +221,7 @@
     font-weight: 400;
     color: transparent;
     letter-spacing: 0.15rem;
-    -webkit-text-stroke: 0.15rem var(--primary);
+    -webkit-text-stroke: 0.15rem var(--on-secondary-fixed-variant);
     transform: scaleY(70%);
   }
 
@@ -240,7 +239,7 @@
     position: absolute;
     width: 20rem;
     height: 26rem;
-    border: 0.2rem solid var(--primary-dark);
+    border: 0.2rem solid var(--on-background);
     border-radius: 1.5rem;
     background-color: var(--primary-dark);
     transform-origin: bottom left;

@@ -14,9 +14,9 @@
     }
 
     update() {
-      this.x += this.velocity
-      if (this.x > this.containerWidth) {
-        this.x = -this.width
+      this.x -= this.velocity
+      if (this.x < -this.width) {
+        this.x = this.containerWidth
       }
     }
 
@@ -100,11 +100,11 @@
 
     background-image: repeating-linear-gradient(
       50deg,
-      #00f8f1 0,
-      #ffbd1e 20px,
-      #fe848f 40px,
-      #ffbd1e 60px,
-      #00f8f1 80px
+      var(--rays-color-1) 0,
+      var(--rays-color-2) 20px,
+      var(--rays-color-3) 40px,
+      var(--rays-color-2) 60px,
+      var(--rays-color-1) 80px
     );
 
     transform: translate3d(-50%, -50%, 0) rotate(-70deg);

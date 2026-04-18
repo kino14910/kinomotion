@@ -264,16 +264,20 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     transition: all 0.2s ease;
     border-left: 3px solid transparent;
   }
+
   .toc a:hover {
     background: var(--surface-dim);
     color: var(--on-primary-container);
+    
   }
+
   .toc a.active {
     background: var(--primary-container);
     color: var(--on-primary-container);
     border-left-color: var(--primary-dark);
     font-weight: 500;
   }
+
   @media (max-width: 1024px) {
     .contents,
     .toc {

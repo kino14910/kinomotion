@@ -58,6 +58,9 @@
   --primary-gray-gradient: var(--surface), var(--surface-variant);
   --bgi-gradient: rgb(254 215 246/0), rgb(254 215 246/0);
   --black: var(--on-background);
+  --rays-color-1: rgb(221 138 214);
+  --rays-color-2: rgb(255 216 248);
+  --rays-color-3: rgb(180 100 170);
   --font-family-serif: Merriweather, serif;
   --font-family-sans-code: 'Roboto Mono', sans-serif;
   --font-family-sans: 'MiSans', 'Roboto Mono', 'Fira Sans', sans-serif;
@@ -116,6 +119,9 @@
   --primary-dark: rgb(255 200 210);
   --primary-gray-gradient: rgb(21 0 0), rgba(46 10 14, 0.5);
   --bgi-gradient: rgba(0 0 0 / 0.53), rgba(0 0 0 / 0.53);
+  --rays-color-1: rgb(240 18 65);
+  --rays-color-2: rgb(100 5 25);
+  --rays-color-3: rgb(180 14 48);
 }
 
 :root {
