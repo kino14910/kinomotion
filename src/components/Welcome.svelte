@@ -2,7 +2,7 @@
   <div class="background"></div>
   <div class="home-container">
     <div class="home-copy">
-      <h1>Flokroll</h1>
+      <h1>Folkroll</h1>
       <p>Learn more <a href="/about">about me -></a></p>
     </div>
   </div>

@@ -1,7 +1,9 @@
 <script>
+  import { onMount } from 'svelte'
+
   let theme = $state('light')
 
-  $effect(() => {
+  onMount(() => {
     const storedTheme = localStorage.getItem('theme')
     if (storedTheme) {
       theme = storedTheme

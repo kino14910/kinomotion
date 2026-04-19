@@ -40,26 +40,6 @@
       }, 100)
     })
 
-    const onNativeScroll = () => {
-      if (isDragging) return
-
-      const scrollTop = window.scrollY || document.documentElement.scrollTop
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight
-
-      if (maxScroll > 0) {
-        scrollProgress = scrollTop / maxScroll
-
-        isScrolling = true
-        clearTimeout(scrollingTimeout)
-        scrollingTimeout = setTimeout(() => {
-          isScrolling = false
-        }, 100)
-      }
-    }
-
-    window.addEventListener('scroll', onNativeScroll, { passive: true })
-
     const resizeObserver = new ResizeObserver(() => {
       containerHeight = window.innerHeight
       contentHeight = document.documentElement.scrollHeight
@@ -71,7 +51,6 @@
     return () => {
       lenisInstance.destroy()
       resizeObserver.disconnect()
-      window.removeEventListener('scroll', onNativeScroll)
       clearTimeout(scrollingTimeout)
     }
   })

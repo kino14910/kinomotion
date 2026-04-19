@@ -35,22 +35,6 @@ const {
         {
           posts.map(post => (
             <li>
-              {/* <a href={`/${basePath}/${post.id}/`}>
-                    {showImage && (
-                      <Image
-                        width={720}
-                        height={360}
-                        src={post.data.heroImage ?? heroImage}
-                        alt=''
-                      />
-                    )}
-                    <h6 class='title'>{post.data.title}</h6>
-                    {showDate && (
-                      <p class='date'>
-                        <FormattedDate date={post.data.pubDate} />
-                      </p>
-                    )}
-                  </a> */}
               <BlogLink
                 url={`/${basePath}/${post.id}/`}
                 title={post.data.title}

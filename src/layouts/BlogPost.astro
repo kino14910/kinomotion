@@ -77,7 +77,10 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
 <script>
   let scrollHandler: ((e: Event) => void) | null
   let observer: IntersectionObserver | null = null
-  let clickHandlers: { el: HTMLAnchorElement; handler: (e: any) => void }[] = []
+  let clickHandlers: {
+    el: HTMLAnchorElement
+    handler: (e: MouseEvent) => void
+  }[] = []
 
   function setupBlogPost() {
     cleanupBlogPost()
@@ -268,7 +271,6 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
   .toc a:hover {
     background: var(--surface-dim);
     color: var(--on-primary-container);
-    
   }
 
   .toc a.active {

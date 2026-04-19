@@ -17,9 +17,9 @@ import Nav from './Nav.astro'
 
   window.addEventListener('scroll', handleHeaderScroll, { passive: true })
 
-  document.addEventListener('astro:page-load', () => {
-    handleHeaderScroll()
-  })
+  document.addEventListener('astro:page-load', handleHeaderScroll)
+
+  document.addEventListener('astro:before-swap', handleHeaderScroll)
 </script>
 
 <div class='header-placeholder'></div>

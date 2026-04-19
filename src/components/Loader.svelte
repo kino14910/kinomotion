@@ -1,43 +1,105 @@
-<script>
-  import gsap from 'gsap'
+<script lang="ts">
+  import { onMount } from 'svelte'
 
-  const DURATION = 1.4
+  type Phase = 'entering' | 'covering' | 'exiting' | 'done'
 
-  $effect(() => {
-    const tl = gsap.timeline({
-      delay: DURATION,
-      onComplete: () => {
-        document.body.style.overflow = ''
-      },
+  interface BeforeSwapEvent extends Event {
+    newDocument: Document
+    direction: string
+    resume: () => void
+  }
+
+  let phase: Phase = $state('covering')
+
+  const ENTER_DURATION = 600
+  const HOLD_DURATION = 400
+  const EXIT_DURATION = 800
+
+  let timers: ReturnType<typeof setTimeout>[] = []
+  let enterComplete = false
+  let pendingSwapEvent: BeforeSwapEvent | null = null
+
+  function clearTimers() {
+    timers.forEach(clearTimeout)
+    timers = []
+  }
+
+  function scheduleExit() {
+    const exitTimer = setTimeout(() => {
+      phase = 'exiting'
+    }, HOLD_DURATION)
+
+    const doneTimer = setTimeout(() => {
+      phase = 'done'
+      document.body.style.overflow = ''
+    }, HOLD_DURATION + EXIT_DURATION)
+
+    timers.push(exitTimer, doneTimer)
+  }
+
+  function onNavigationStart() {
+    enterComplete = false
+    pendingSwapEvent = null
+    clearTimers()
+    document.body.style.overflow = 'hidden'
+    phase = 'entering'
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        phase = 'covering'
+      })
     })
 
-    tl.to('.loader-wrapper', {
-      yPercent: 100,
-      opacity: 0.8,
-      duration: 0.8,
-      ease: 'expo.inOut',
-      display: 'none',
-    })
+    const enterTimer = setTimeout(() => {
+      enterComplete = true
+      if (pendingSwapEvent) {
+        pendingSwapEvent.resume()
+        pendingSwapEvent = null
+      }
+    }, ENTER_DURATION)
+    timers.push(enterTimer)
+  }
 
-    tl.from(
-      '.page-content',
-      {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        clearProps: 'all',
-      },
-      '-=0.4',
-    )
+  function onBeforeSwap(event: Event) {
+    if (!enterComplete) {
+      event.preventDefault()
+      pendingSwapEvent = event as BeforeSwapEvent
+    }
+  }
+
+  function onNavigationEnd() {
+    clearTimers()
+    scheduleExit()
+  }
+
+  onMount(() => {
+    document.body.style.overflow = 'hidden'
+    scheduleExit()
+
+    document.addEventListener('astro:before-preparation', onNavigationStart)
+    document.addEventListener('astro:before-swap', onBeforeSwap)
+    document.addEventListener('astro:page-load', onNavigationEnd)
 
     return () => {
       document.body.style.overflow = ''
-      tl.kill()
+      clearTimers()
+      document.removeEventListener(
+        'astro:before-preparation',
+        onNavigationStart,
+      )
+      document.removeEventListener('astro:before-swap', onBeforeSwap)
+      document.removeEventListener('astro:page-load', onNavigationEnd)
     }
   })
 </script>
 
-<div class="loader-wrapper">
+<div
+  class="loader-wrapper"
+  class:entering={phase === 'entering'}
+  class:covering={phase === 'covering'}
+  class:exiting={phase === 'exiting'}
+  class:done={phase === 'done'}
+>
   <div class="loader-inner">
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -75,6 +137,27 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    transform: translateX(0);
+    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .loader-wrapper.entering {
+    transform: translateX(-100%);
+    transition: none;
+  }
+
+  .loader-wrapper.covering {
+    transform: translateX(0);
+  }
+
+  .loader-wrapper.exiting {
+    transform: translateX(100%);
+    transition: transform 800ms cubic-bezier(0.7, 0, 0.84, 0);
+  }
+
+  .loader-wrapper.done {
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .loader-inner {
@@ -104,7 +187,6 @@
     }
   }
 
-  /* --- 方块掉落动画 --- */
   .rects rect {
     fill: currentColor;
   }

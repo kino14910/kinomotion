@@ -160,9 +160,9 @@
     )
   }
 
-  $effect(() => {
-    setSize()
+  $effect.pre(() => {
     if (width > 0 && height > 0) {
+      setSize()
       setLines()
     }
     rafId = requestAnimationFrame(tick)

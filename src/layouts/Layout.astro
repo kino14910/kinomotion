@@ -19,7 +19,9 @@ const { title, description } = Astro.props
   </head>
   <body>
     <div class='layout'>
-      <Loader client:only />
+      <div transition:persist='loader'>
+        <Loader client:load />
+      </div>
       <ScrollBar client:only />
       <Header />
       <slot />

@@ -61,8 +61,17 @@
 
   // $inspect(cards[1].offsetX)
 
-  let cardElements: HTMLElement[] = $state([])
+  let cardElements = new Map<number, HTMLElement>()
   let container: HTMLElement | null
+
+  function cardRef(id: number): Attachment {
+    return (node: HTMLElement) => {
+      cardElements.set(id, node)
+      return () => {
+        cardElements.delete(id)
+      }
+    }
+  }
 
   let dragStartX = 0
   let dragStartY = 0
@@ -71,14 +80,13 @@
   function handlePointerDown(e: MouseEvent, cardId: number) {
     activeCardId = cardId
     const card = cards.find(c => c.id === cardId)
-    const draggingCard = cardElements.find(card => card == e.target)
+    const draggingCard = cardElements.get(cardId)
     if (card && draggingCard && container) {
       card.dragging = true
       card.transitioning = false
 
-      const cardRect: DOMRect | undefined = draggingCard.getBoundingClientRect()
-      const containerRect: DOMRect | undefined =
-        container.getBoundingClientRect()
+      const cardRect = draggingCard.getBoundingClientRect()
+      const containerRect = container.getBoundingClientRect()
       dragStartX = e.clientX
       dragStartY = e.clientY
 
@@ -89,11 +97,11 @@
 
   function handlePointerMove(e: MouseEvent) {
     if (activeCardId === null) return
-    const draggingCard = cardElements.find(card => card == e.target)
     const card = cards.find(c => c.id === activeCardId)
+    const draggingCard = cardElements.get(activeCardId)
     if (!(card && card.dragging && draggingCard && container)) return
-    const cardRect: DOMRect | undefined = draggingCard.getBoundingClientRect()
-    const containerRect: DOMRect | undefined = container.getBoundingClientRect()
+    const cardRect = draggingCard.getBoundingClientRect()
+    const containerRect = container.getBoundingClientRect()
     card.offsetX = e.clientX - containerRect.x - cardRect.width / 2
     card.offsetY = e.clientY - containerRect.y - cardRect.height / 2
   }
@@ -159,7 +167,7 @@
             ? 'transform 0.3s ease'
             : 'none'}
           onpointerdown={e => handlePointerDown(e, card.id)}
-          bind:this={cardElements[index]}
+          {@attach cardRef(card.id)}
         >
           <img src={card.src} alt="Poker Card" loading="lazy" />
         </div>

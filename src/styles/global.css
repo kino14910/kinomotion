@@ -151,8 +151,7 @@
   scrollbar-width: thin;
   scrollbar-color: var(--text-secondary) var(--bg-color);
   scroll-behavior: smooth;
-  transition: color 0.3s ease;
-  transition: background-color 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease;
   font-size: 2vmin;
   -webkit-user-drag: none;
 }
