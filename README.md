@@ -1,4 +1,4 @@
-# Folkroll
+# Kino Motion
 
 <div align="center">
 
@@ -12,7 +12,7 @@ A personal blog built with Astro, Svelte and TypeScript
 
 ## 📝 简介
 
-Folkroll 是一个现代化的个人博客网站，使用 Astro、Svelte 和 TypeScript 构建。它提供了优雅的界面和流畅的用户体验，用于分享技术笔记、游戏心得和个人见解。
+Kino Motion 是一个现代化的个人博客网站，使用 Astro、Svelte 和 TypeScript 构建。它提供了优雅的界面和流畅的用户体验，用于分享技术笔记、游戏心得和个人见解。
 
 ## ✨ 特性
 
@@ -39,7 +39,7 @@ Folkroll 是一个现代化的个人博客网站，使用 Astro、Svelte 和 Typ
 ## 📁 项目结构
 
 ```
-folkroll/
+kinomotion/
 ├── public/              # 静态资源
 │   ├── assets/         # 公共资源
 │   ├── favicon.ico     # 网站图标
