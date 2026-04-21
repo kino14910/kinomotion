@@ -2,9 +2,7 @@
 
 <div align="center">
 
-**Kino's Blog**
-
-A personal blog built with Astro, Svelte and TypeScript
+A personal frontend interaction lab built with Astro, Svelte and TypeScript
 
 [![Astro](https://img.shields.io/badge/Astro-5.17.1-FF5D01?style=flat&logo=astro)](https://astro.build/) [![Svelte](https://img.shields.io/badge/Svelte-5.53.7-FF3E00?style=flat&logo=svelte)](https://svelte.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 
@@ -48,7 +46,6 @@ kinomotion/
 │   ├── assets/         # 项目资源
 │   ├── components/     # Svelte 和 Astro 组件
 │   ├── content/        # Markdown/MDX 内容
-│   │   ├── blog/       # 博客文章
 │   │   └── note/       # 笔记
 │   ├── layouts/        # 页面布局
 │   ├── pages/          # 页面路由
@@ -90,7 +87,7 @@ npm run preview
 
 ### 博客文章
 
-在 `src/content/blog/` 目录下创建 Markdown 或 MDX 文件：
+在 `src/content/note/` 目录下创建 Markdown 或 MDX 文件：
 
 ```markdown
 ---
