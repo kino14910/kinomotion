@@ -59,6 +59,24 @@ import Bio from '../components/Bio.astro'
     clip-path: polygon(0 75%, 100% 75%, 100% 100%, 0 100%);
     z-index: -1;
   }
+
+  :global(.theme-dark .title *) {
+    color: var(--p5-white);
+  }
+
+  :global(.theme-dark .title h1) {
+    font-style: italic;
+    text-shadow:
+      0.06em 0.06em 0 var(--primary),
+      -0.03em -0.02em 0 var(--p5-black);
+    -webkit-text-stroke: 0.04em var(--p5-black);
+    /* transform: skewX(-8deg) rotate(-1deg); */
+  }
+
+  :global(.theme-dark .title h1:before),
+  :global(.theme-dark .title h1:after) {
+    content: "";
+  }
   
   .rays-container {
     position: fixed;

@@ -57,6 +57,17 @@ import Nav from './Nav.astro'
     padding: 0 10%;
   }
 
+  :global(.theme-dark) header {
+    color: var(--p5-white);
+  }
+
+  :global(.theme-dark) header.scrolled {
+    background: var(--p5-black);
+    border-bottom: 4px solid var(--primary);
+    box-shadow: 0 0.35rem 0 var(--p5-white);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 0.45rem), 92% 100%, 0 100%);
+  }
+
   /* .logo {
     transition:
       opacity 0.3s ease,

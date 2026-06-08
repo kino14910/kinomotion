@@ -164,10 +164,50 @@
     color: var(--primary);
   }
 
+  :global(.theme-dark) .loader-wrapper {
+    background:
+      repeating-linear-gradient(
+        -24deg,
+        var(--p5-black) 0 40px,
+        var(--primary) 40px 62px,
+        var(--p5-black) 62px 94px,
+        var(--p5-white) 94px 100px
+      );
+  }
+
+  :global(.theme-dark) .loader-wrapper.entering {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  :global(.theme-dark) .loader-wrapper.exiting {
+    transform: translateX(0);
+    opacity: 0;
+    transition: transform 800ms cubic-bezier(0.7, 0, 0.84, 0);
+    transition: opacity 400ms cubic-bezier(0.7, 0, 0.84, 0);
+  }
+
+  :global(.theme-dark) .loader-inner {
+    display: grid;
+    place-items: center;
+    width: 8rem;
+    height: 8rem;
+    background: var(--p5-black);
+    border: 4px solid var(--p5-white);
+    color: var(--p5-white);
+    box-shadow: 0.6rem 0.6rem 0 var(--primary);
+    transform: rotate(-5deg);
+  }
+
   .logo-svg {
     width: 62px;
     height: auto;
     overflow: visible;
+  }
+
+  :global(.theme-dark) .logo-svg {
+    filter: drop-shadow(0.18rem 0.18rem 0 var(--primary));
+    transform: rotate(5deg);
   }
 
   .logo-svg path {

@@ -213,6 +213,30 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     position: relative;
     margin: 0 0 0.5em 0;
   }
+
+  :global(.theme-dark) .title {
+    text-align: left;
+  }
+
+  :global(.theme-dark) .title h1 {
+    display: inline;
+    color: var(--p5-white);
+    font-weight: 900;
+    text-shadow:
+      0.08em 0.08em 0 var(--primary),
+      -0.04em -0.02em 0 var(--p5-black);
+  }
+
+  :global(.theme-dark) .date {
+    display: inline-block;
+    padding: 0.2em 0.6em;
+    background: var(--primary);
+    color: var(--p5-white);
+    font-weight: 900;
+    text-transform: uppercase;
+    transform: skewX(-10deg);
+  }
+
   .date {
     margin-bottom: 0.5em;
     color: var(--primary-gray);
@@ -234,6 +258,15 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
       top 0.3s ease,
       max-height 0.3s ease;
   }
+
+  :global(.theme-dark) aside {
+    background: var(--p5-black);
+    border: 3px solid var(--p5-white);
+    border-radius: 0;
+    box-shadow: 0.4rem 0.4rem 0 var(--primary);
+    clip-path: polygon(0 0, calc(100% - 1rem) 0, 100% 1rem, 100% 100%, 0 100%);
+  }
+
   aside h2 {
     margin: 0 0 1em 0;
     font-size: 1.2em;
@@ -241,6 +274,16 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     border-bottom: 2px solid var(--primary);
     padding-bottom: 0.5em;
   }
+
+  :global(.theme-dark) aside h2 {
+    color: var(--p5-white);
+    border-bottom: 4px solid var(--primary);
+    font-family: 'Impact Regular';
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-shadow: 0.1em 0.08em 0 var(--primary);
+  }
+
   .toc {
     overflow-y: auto;
     scrollbar-gutter: stable;
@@ -268,9 +311,21 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     border-left: 3px solid transparent;
   }
 
+  :global(.theme-dark) .toc a {
+    color: var(--p5-white);
+    border-left-width: 5px;
+    font-weight: 800;
+  }
+
   .toc a:hover {
     background: var(--surface-dim);
     color: var(--on-primary-container);
+  }
+
+  :global(.theme-dark) .toc a:hover {
+    background: var(--primary);
+    color: var(--p5-white);
+    transform: skewX(-6deg);
   }
 
   .toc a.active {
@@ -278,6 +333,14 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     color: var(--on-primary-container);
     border-left-color: var(--primary-dark);
     font-weight: 500;
+  }
+
+  :global(.theme-dark) .toc a.active {
+    background: var(--p5-white);
+    color: var(--p5-black);
+    border-left-color: var(--primary);
+    font-weight: 900;
+    box-shadow: 0.25rem 0.25rem 0 var(--primary);
   }
 
   @media (max-width: 1024px) {

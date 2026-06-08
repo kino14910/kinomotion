@@ -1,4 +1,6 @@
 <script lang="ts">
+    import type { Attachment } from "svelte/attachments"
+
   const imageCount = 9
   let imgs = $state(
     Array.from({ length: imageCount }, (_, i) => `assets/pokers/poker${i}.jpg`),
@@ -65,8 +67,8 @@
   let container: HTMLElement | null
 
   function cardRef(id: number): Attachment {
-    return (node: HTMLElement) => {
-      cardElements.set(id, node)
+    return (el) => {
+      cardElements.set(id, el as HTMLElement)
       return () => {
         cardElements.delete(id)
       }
@@ -233,6 +235,15 @@
     transform: scaleY(70%);
   }
 
+  :global(.theme-dark) .banner {
+    color: var(--p5-white);
+    -webkit-text-stroke: 0.12rem var(--p5-black);
+    text-shadow:
+      0.06em 0.06em 0 var(--primary),
+      0.1em 0.1em 0 var(--p5-white);
+    transform: scaleY(70%) skewX(-8deg) rotate(-2deg);
+  }
+
   .home-photos-plates {
     position: relative;
     width: 45rem;
@@ -301,6 +312,14 @@
     border-radius: 50%;
     animation: arrow-move 1.5s infinite ease-in-out;
     filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.5));
+  }
+
+  :global(.theme-dark) .arrow-wrapper {
+    background-color: var(--p5-white);
+    color: var(--p5-black);
+    border: 0.18rem solid var(--primary);
+    border-radius: 0;
+    filter: drop-shadow(0.22rem 0.22rem 0 var(--primary));
   }
 
   @keyframes arrow-move {

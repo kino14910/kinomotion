@@ -49,4 +49,22 @@ interface Props {
   .social-links a:hover {
     color: var(--on-primary);
   }
+
+  :global(.theme-dark) footer {
+    background: linear-gradient(var(--primary-gray-gradient)) no-repeat;
+    color: var(--p5-white);
+    box-shadow: inset 0 0.45rem 0 var(--primary);
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  :global(.theme-dark) .social-links a {
+    color: var(--p5-white);
+    filter: drop-shadow(0.14rem 0.14rem 0 var(--primary));
+  }
+
+  :global(.theme-dark) .social-links a:hover {
+    color: var(--primary);
+    filter: drop-shadow(0.14rem 0.14rem 0 var(--p5-white));
+  }
 </style>

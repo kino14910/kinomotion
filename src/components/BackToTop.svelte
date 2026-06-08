@@ -71,6 +71,26 @@
     }
   }
 
+  :global(.theme-dark) .back-to-top {
+    background: var(--primary);
+    color: var(--p5-white);
+    border: 3px solid var(--p5-white);
+    border-radius: 0;
+    box-shadow: 0.3rem 0.3rem 0 var(--p5-black);
+    transform: translateY(20px) skewX(-10deg);
+  }
+
+  :global(.theme-dark) .back-to-top.visible {
+    transform: translateY(0) skewX(-10deg);
+  }
+
+  :global(.theme-dark) .back-to-top:hover {
+    background: var(--p5-white);
+    color: var(--p5-black);
+    box-shadow: 0.45rem 0.45rem 0 var(--primary);
+    transform: translateY(-2px) skewX(-10deg);
+  }
+
   @media (max-width: 768px) {
     .back-to-top {
       bottom: 1.5em;

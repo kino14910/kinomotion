@@ -87,9 +87,30 @@ const {
     margin-bottom: 0.5rem;
     border-radius: 12px;
   }
+
+  :global(.theme-dark) main {
+    max-width: 1600px;
+    padding: clamp(1rem, 3vw, 3rem);
+  }
+
+  :global(.theme-dark) ul {
+    gap: clamp(1rem, 2vw, 2rem);
+  }
+
+  :global(.theme-dark) ul li {
+    margin: 0;
+  }
+
+  :global(.theme-dark) section {
+    position: relative;
+  }
+
   @media (max-width: 720px) {
     ul {
       gap: 0.5em;
+    }
+    ul {
+      grid-template-columns: 1fr;
     }
     ul li {
       width: 100%;

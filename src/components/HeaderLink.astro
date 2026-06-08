@@ -39,4 +39,32 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '')
       transform: scaleX(1);
     }
   }
+
+  :global(.theme-dark) a {
+    color: var(--p5-white);
+    letter-spacing: 0.04em;
+    opacity: 1;
+    transform: skewX(-8deg);
+  }
+
+  :global(.theme-dark) a:not(.selected) {
+    opacity: 0.82;
+  }
+
+  :global(.theme-dark) a::before {
+    height: 4px;
+    background: var(--primary);
+    box-shadow: 0 -0.25rem 0 var(--p5-white);
+    transform-origin: left;
+  }
+
+  :global(.theme-dark) a:hover,
+  :global(.theme-dark) a.selected {
+    color: var(--p5-white);
+  }
+
+  :global(.theme-dark) a:hover::before,
+  :global(.theme-dark) a.selected::before {
+    transform: scaleX(1);
+  }
 </style>

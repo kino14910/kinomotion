@@ -102,4 +102,34 @@
     width: 20px;
     height: 20px;
   }
+
+  :global(.theme-dark) .theme-toggle {
+    padding: 0.15em 0.4em;
+  }
+
+  :global(.theme-dark) .theme-button {
+    width: 42px;
+    height: 42px;
+    background: var(--p5-white);
+    color: var(--p5-black);
+    border: 3px solid var(--primary);
+    border-radius: 0;
+    box-shadow: 0.18rem 0.18rem 0 var(--p5-black);
+    transform: skewX(-10deg);
+  }
+
+  :global(.theme-dark) .theme-button:hover {
+    background: var(--primary);
+    color: var(--p5-white);
+    box-shadow: 0.28rem 0.28rem 0 var(--p5-white);
+  }
+
+  :global(.theme-dark) .theme-button:focus-visible {
+    outline: 3px solid var(--p5-white);
+    outline-offset: 3px;
+  }
+
+  :global(.theme-dark) .theme-button svg {
+    transform: skewX(10deg);
+  }
 </style>

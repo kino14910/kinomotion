@@ -75,4 +75,50 @@
   a:hover .date {
     color: var(--primary);
   }
+
+  :global(.theme-dark) a {
+    min-height: 100%;
+    padding: 1rem 2rem;
+    background: var(--p5-black);
+    border: 3px solid var(--p5-white);
+    box-shadow: 0.35rem 0.35rem 0 var(--primary);
+    /* clip-path: polygon(0.8rem 0, 100% 0, calc(100% - 0.8rem) 100%, 0 100%); */
+    transform: skewX(-5deg);
+  }
+
+  :global(.theme-dark) a:hover {
+    background: var(--primary);
+    color: var(--p5-white);
+    border-color: var(--p5-white);
+    box-shadow: 0.5rem 0.5rem 0 var(--p5-white);
+    transform: translate(-0.12rem, -0.12rem) rotate(-1deg) skewX(-5deg);
+  }
+
+  :global(.theme-dark) .title {
+    color: var(--p5-white);
+    font-family: 'Impact Regular';
+    font-size: clamp(1.25rem, 1.8vw, 1.85rem);
+    font-weight: 400;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  :global(.theme-dark) .title:before {
+    left: -18px;
+    border-top-width: 7px;
+    border-left-width: 13px;
+    border-bottom-width: 7px;
+    color: var(--p5-white);
+  }
+
+  :global(.theme-dark) .date {
+    margin-top: 0.6rem;
+    color: var(--p5-white);
+    font-weight: 800;
+  }
+
+  :global(.theme-dark) a:hover .title,
+  :global(.theme-dark) a:hover .date {
+    color: var(--p5-white);
+  }
 </style>

@@ -33,5 +33,24 @@
       font-size: 1.125rem;
       background: color-mix(in srgb, var(--background), transparent 50%);
     }
+
+    :global(.theme-dark) img {
+      border: 4px solid var(--p5-white);
+      border-radius: 0;
+      box-shadow: 0.45rem 0.45rem 0 var(--primary);
+      transform: rotate(-3deg);
+    }
+
+    :global(.theme-dark) p {
+      padding: 1.2rem 1.4rem;
+      background: var(--p5-white);
+      color: var(--p5-black);
+      font-weight: 700;
+      box-shadow: 0.45rem 0.45rem 0 var(--primary);
+    }
+
+    :global(.theme-dark) p a {
+      color: var(--p5-black);
+    }
   </style>
 </div>
