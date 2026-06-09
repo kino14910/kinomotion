@@ -3,23 +3,26 @@ import Logo from './Logo.astro'
 import Nav from './Nav.astro'
 ---
 
-<script>
-  function handleHeaderScroll() {
-    const header = document.querySelector('header')
-    if (header) {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled')
-      } else {
-        header.classList.remove('scrolled')
-      }
-    }
+<script is:inline>
+  window.__kinoHeaderScrollCleanup?.()
+
+  const syncHeaderScroll = () => {
+    document
+      .querySelector('header')
+      ?.classList.toggle('scrolled', window.scrollY > 50)
   }
 
-  window.addEventListener('scroll', handleHeaderScroll, { passive: true })
+  window.addEventListener('scroll', syncHeaderScroll, { passive: true })
+  document.addEventListener('astro:page-load', syncHeaderScroll)
+  document.addEventListener('astro:before-swap', syncHeaderScroll)
 
-  document.addEventListener('astro:page-load', handleHeaderScroll)
+  window.__kinoHeaderScrollCleanup = () => {
+    window.removeEventListener('scroll', syncHeaderScroll)
+    document.removeEventListener('astro:page-load', syncHeaderScroll)
+    document.removeEventListener('astro:before-swap', syncHeaderScroll)
+  }
 
-  document.addEventListener('astro:before-swap', handleHeaderScroll)
+  syncHeaderScroll()
 </script>
 
 <div class='header-placeholder'></div>
@@ -47,7 +50,6 @@ import Nav from './Nav.astro'
     width: 100%;
     transition: all 0.3s ease;
     z-index: 99;
-    /* min-height: 80px; */
   }
 
   header.scrolled {
@@ -67,18 +69,6 @@ import Nav from './Nav.astro'
     box-shadow: 0 0.35rem 0 var(--p5-white);
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 0.45rem), 92% 100%, 0 100%);
   }
-
-  /* .logo {
-    transition:
-      opacity 0.3s ease,
-      transform 0.3s ease;
-  } */
-
-  /* header.scrolled .logo {
-    opacity: 0;
-    transform: translateX(-20px);
-    pointer-events: none;
-  } */
 
   @media screen and (max-width: 520px) {
     .header-placeholder {

@@ -10,11 +10,9 @@ export interface Props {
     data: {
       title: string
       pubDate: Date
-      heroImage?: ImageMetadata
     }
   }>
   basePath: string
-  showImage?: boolean
   showDate?: boolean
 }
 
@@ -23,7 +21,6 @@ const {
   description,
   posts,
   basePath,
-  showImage = true,
   showDate = true,
 } = Astro.props
 ---

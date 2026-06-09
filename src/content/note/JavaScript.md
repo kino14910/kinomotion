@@ -51,7 +51,7 @@ slice() 方法返回一个新的数组对象，这一对象是一个由 start �
 #### Array.prototype.reduce()
 
 用法：
-```javascrip
+```javascript
 const array1 = [1, 2, 3, 4];
 
 // 0 + 1 + 2 + 3 + 4

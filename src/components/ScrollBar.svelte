@@ -10,7 +10,7 @@
   let isScrolling = $state(false)
   let isHovered = $state(false)
 
-  let lenis = $state(null)
+  let lenis = null
   let dragStart = { y: 0, progress: 0 }
   let scrollingTimeout
 
@@ -18,11 +18,16 @@
     contentHeight > 0 ? containerHeight / contentHeight : 1,
   )
   let thumbHeight = $derived(
-    Math.max(minThumbHeight, heightRatio * containerHeight),
+    Math.min(
+      containerHeight,
+      Math.max(minThumbHeight, heightRatio * containerHeight),
+    ),
   )
-  let trackSpace = $derived(containerHeight - thumbHeight)
+  let trackSpace = $derived(Math.max(0, containerHeight - thumbHeight))
   let thumbTop = $derived(scrollProgress * trackSpace)
   let hideTrack = $derived(heightRatio >= 1)
+  let maxScroll = $derived(Math.max(0, contentHeight - containerHeight))
+  let ariaValue = $derived(Math.round(scrollProgress * 100))
 
   $effect(() => {
     const lenisInstance = new Lenis({
@@ -32,7 +37,6 @@
 
     lenisInstance.on('scroll', e => {
       scrollProgress = e.progress
-
       isScrolling = true
       clearTimeout(scrollingTimeout)
       scrollingTimeout = setTimeout(() => {
@@ -40,23 +44,33 @@
       }, 100)
     })
 
-    const resizeObserver = new ResizeObserver(() => {
+    const updateDimensions = () => {
       containerHeight = window.innerHeight
       contentHeight = document.documentElement.scrollHeight
-    })
-    resizeObserver.observe(document.documentElement)
+    }
+    const resizeObserver = new ResizeObserver(updateDimensions)
 
+    updateDimensions()
+    resizeObserver.observe(document.documentElement)
     lenis = lenisInstance
 
     return () => {
       lenisInstance.destroy()
       resizeObserver.disconnect()
       clearTimeout(scrollingTimeout)
+      lenis = null
     }
   })
 
   function getClientY(e) {
     return e.touches ? e.touches[0].clientY : e.clientY
+  }
+
+  function scrollToProgress(progress) {
+    if (!lenis) return
+    const targetProgress = Math.max(0, Math.min(1, progress))
+    lenis.scrollTo(targetProgress * maxScroll, { immediate: true })
+    scrollProgress = targetProgress
   }
 
   function onDragStart(e) {
@@ -68,23 +82,40 @@
   }
 
   function handleGlobalMove(e) {
-    if (!isDragging || !lenis) return
+    if (!isDragging || trackSpace <= 0) return
     const deltaY = getClientY(e) - dragStart.y
     const progressDelta = deltaY / trackSpace
-    let targetProgress = Math.max(
-      0,
-      Math.min(1, dragStart.progress + progressDelta),
-    )
-
-    lenis.scrollTo(targetProgress * (contentHeight - containerHeight), {
-      immediate: true,
-    })
-    scrollProgress = targetProgress
+    scrollToProgress(dragStart.progress + progressDelta)
   }
 
   function handleGlobalUp() {
     isDragging = false
     isScrolling = false
+  }
+
+  function handleKeydown(e) {
+    const smallStep = 0.05
+    const largeStep = 0.2
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      scrollToProgress(scrollProgress + smallStep)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      scrollToProgress(scrollProgress - smallStep)
+    } else if (e.key === 'PageDown') {
+      e.preventDefault()
+      scrollToProgress(scrollProgress + largeStep)
+    } else if (e.key === 'PageUp') {
+      e.preventDefault()
+      scrollToProgress(scrollProgress - largeStep)
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      scrollToProgress(0)
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      scrollToProgress(1)
+    }
   }
 </script>
 
@@ -106,23 +137,22 @@
   ]}
   onmouseenter={() => (isHovered = true)}
   onmouseleave={() => (isHovered = false)}
+  onmousedown={onDragStart}
+  ontouchstart={onDragStart}
+  onkeydown={handleKeydown}
   role="scrollbar"
   aria-controls="main-content"
   aria-orientation="vertical"
-  aria-valuenow={Math.round(scrollProgress * 100)}
-  tabindex="-1"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-valuenow={ariaValue}
+  aria-valuetext={`${ariaValue}%`}
+  tabindex="0"
 >
   <div class="track">
     <div
       class={['thumb', { 'no-transition': isScrolling || isDragging }]}
-      onmousedown={onDragStart}
-      ontouchstart={onDragStart}
       style="height: {thumbHeight}px; transform: translateY({thumbTop}px);"
-      role="slider"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      aria-valuenow={Math.round(scrollProgress * 100)}
-      tabindex="-1"
     ></div>
   </div>
 </div>
@@ -144,6 +174,11 @@
     user-select: none;
     touch-action: pan-y;
     transition: opacity 0.3s;
+  }
+
+  .track-container:focus-visible {
+    outline: 2px solid var(--outline);
+    outline-offset: -2px;
   }
 
   .hover-show {
@@ -168,7 +203,6 @@
     border-radius: 10px;
     cursor: grab;
     translate: -50% 0;
-    /* 默认有平滑过渡，用于点击滑道跳转等场景 */
     transition:
       transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
       width 0.15s,
@@ -176,7 +210,6 @@
     will-change: transform;
   }
 
-  /* 核心修复：滚动或拖拽时，立即禁用过渡，实现实时跟随 */
   .thumb.no-transition {
     transition:
       width 0.15s,

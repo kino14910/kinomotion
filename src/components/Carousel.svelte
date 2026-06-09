@@ -1,5 +1,6 @@
 <script lang="ts">
-    import type { Attachment } from "svelte/attachments"
+  import { SvelteMap } from 'svelte/reactivity'
+  import type { Attachment } from 'svelte/attachments'
 
   const imageCount = 9
   let imgs = $state(
@@ -63,7 +64,7 @@
 
   // $inspect(cards[1].offsetX)
 
-  let cardElements = new Map<number, HTMLElement>()
+  let cardElements = new SvelteMap<number, HTMLElement>()
   let container: HTMLElement | null
 
   function cardRef(id: number): Attachment {
@@ -75,29 +76,26 @@
     }
   }
 
-  let dragStartX = 0
-  let dragStartY = 0
   let activeCardId: number | null
 
-  function handlePointerDown(e: MouseEvent, cardId: number) {
+  function handlePointerDown(e: PointerEvent, cardId: number) {
     activeCardId = cardId
     const card = cards.find(c => c.id === cardId)
     const draggingCard = cardElements.get(cardId)
     if (card && draggingCard && container) {
+      draggingCard.setPointerCapture(e.pointerId)
       card.dragging = true
       card.transitioning = false
 
       const cardRect = draggingCard.getBoundingClientRect()
       const containerRect = container.getBoundingClientRect()
-      dragStartX = e.clientX
-      dragStartY = e.clientY
 
       card.offsetX = e.clientX - containerRect.x - cardRect.width / 2
       card.offsetY = e.clientY - containerRect.y - cardRect.height / 2
     }
   }
 
-  function handlePointerMove(e: MouseEvent) {
+  function handlePointerMove(e: PointerEvent) {
     if (activeCardId === null) return
     const card = cards.find(c => c.id === activeCardId)
     const draggingCard = cardElements.get(activeCardId)
@@ -108,8 +106,12 @@
     card.offsetY = e.clientY - containerRect.y - cardRect.height / 2
   }
 
-  function handlePointerUp() {
+  function handlePointerUp(e?: PointerEvent) {
     if (activeCardId === null) return
+    const draggingCard = cardElements.get(activeCardId)
+    if (e && draggingCard?.hasPointerCapture(e.pointerId)) {
+      draggingCard.releasePointerCapture(e.pointerId)
+    }
     const card = cards.find(c => c.id === activeCardId)
     if (card) {
       card.dragging = false
@@ -119,16 +121,6 @@
     }
     activeCardId = null
   }
-
-  // $effect(() => {
-  //   // Update card sources when imgs changes
-  //   cards.forEach((card, index) => {
-  //     const srcIndex = 4 - index
-  //     if (srcIndex >= 0 && srcIndex < imgs.length) {
-  //       card.src = imgs[srcIndex]
-  //     }
-  //   })
-  // })
 
   function move() {
     for (let card of cards) {
@@ -151,6 +143,7 @@
   class="home-photos"
   onpointermove={handlePointerMove}
   onpointerup={handlePointerUp}
+  onpointercancel={handlePointerUp}
   role="main"
 >
   <div class="home-photos-container">
@@ -177,7 +170,7 @@
       <div
         class="poker-top"
         onclick={move}
-        onkeydown={e => e.key === 'Enter' && move()}
+        onkeydown={e => (e.key === 'Enter' || e.key === ' ') && move()}
         role="button"
         tabindex="0"
         aria-label="Next Card"
@@ -249,7 +242,6 @@
     width: 45rem;
     height: 25rem;
     margin-bottom: 1rem;
-    font-size: 2vmin;
   }
 
   .poker,

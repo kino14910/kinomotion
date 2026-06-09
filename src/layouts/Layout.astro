@@ -18,7 +18,7 @@ const { title, description } = Astro.props
     <Head title={title} description={description} />
   </head>
   <body>
-    <div class='layout'>
+    <div class='layout' id='main-content'>
       <div transition:persist='loader'>
         <Loader client:load />
       </div>

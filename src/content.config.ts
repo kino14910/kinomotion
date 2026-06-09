@@ -1,15 +1,13 @@
 import { glob } from 'astro/loaders';
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro:schema';
 
 const note = defineCollection({
-  // Load Markdown and MDX files in the `src/content/note/` directory.
   loader: glob({ base: './src/content/note', pattern: '**/*.{md,mdx}' }),
-  // Type-check frontmatter using a schema
   schema: ({ image }) =>
     z.object({
       title: z.string(),
       description: z.string().optional(),
-      // Transform string to Date object
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
       heroImage: image().optional(),

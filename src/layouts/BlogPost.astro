@@ -1,5 +1,4 @@
 ---
-import heroImagePlaceholder from '@/assets/cg_rm18_0103.webp'
 import BackToTop from '@/components/BackToTop.svelte'
 import FormattedDate from '@/components/FormattedDate.svelte'
 import type { MarkdownHeading } from 'astro'
@@ -14,7 +13,6 @@ const {
   description,
   pubDate,
   updatedDate,
-  heroImage = heroImagePlaceholder,
   headings,
 } = Astro.props
 
@@ -24,12 +22,12 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
 <Layout title={title} description={description}>
   <main>
     {
-      headings && (
+      filteredHeadings.length > 0 && (
         <aside class='contents'>
           <h2>目录</h2>
           <nav class='toc' id='toc'>
             <ul>
-              {headings.map(heading => (
+              {filteredHeadings.map(heading => (
                 <li
                   style={`margin-left: ${(heading.depth - 2) * 0.5}em`}
                   data-depth={heading.depth}
@@ -45,13 +43,6 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
       )
     }
     <article>
-      <!-- <div class='hero-image'>
-          {
-            heroImage && (
-              <Image width={1020} height={510} src={heroImage} alt='' />
-            )
-          }
-        </div> -->
       <div class='prose'>
         <div class='title'>
           <div class='date'>
@@ -76,17 +67,248 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
 
 <script>
   let scrollHandler: ((e: Event) => void) | null
+  let resizeHandler: ((e: Event) => void) | null
   let observer: IntersectionObserver | null = null
+  let activeUpdateFrame: number | null = null
+  let lastPageScrollTop = 0
+  let lastTocTargetTop = -1
+  let tocNavigationTimeout: number | null = null
+  let isTocNavigating = false
   let clickHandlers: {
     el: HTMLAnchorElement
     handler: (e: MouseEvent) => void
   }[] = []
+  const scrollOffset = 80
+  const tocScrollJitterThreshold = 4
+  const tocScrollPadding = 12
+  const visibleViewportBottomRatio = 0.92
+  const pageEdgeThreshold = 12
+  const globalWindow = window as Window & {
+    __kinoBlogPostCleanup?: () => void
+  }
+
+  function getLinkTargetId(link: HTMLAnchorElement) {
+    const rawId = link.getAttribute('href')?.slice(1) ?? ''
+
+    try {
+      return decodeURIComponent(rawId)
+    } catch {
+      return rawId
+    }
+  }
+
+  type PageScrollState = 'top' | 'middle' | 'bottom'
+
+  function getPageScrollState(): PageScrollState {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop
+    const maxScrollTop = Math.max(
+      0,
+      document.documentElement.scrollHeight - window.innerHeight,
+    )
+
+    if (scrollTop <= pageEdgeThreshold) {
+      return 'top'
+    }
+
+    if (maxScrollTop - scrollTop <= pageEdgeThreshold) {
+      return 'bottom'
+    }
+
+    return 'middle'
+  }
+
+  function getActiveHeadingIds(headings: HTMLElement[]) {
+    const pageScrollState = getPageScrollState()
+    const viewportTop = scrollOffset
+    const viewportBottom = window.innerHeight * visibleViewportBottomRatio
+    const activeIds = new Set<string>()
+
+    if (headings.length === 0) {
+      return activeIds
+    }
+
+    if (pageScrollState === 'top') {
+      activeIds.add(headings[0].id)
+    } else if (pageScrollState === 'bottom') {
+      activeIds.add(headings[headings.length - 1].id)
+    }
+
+    headings.forEach((heading, index) => {
+      const nextHeading = headings[index + 1]
+      const top = heading.getBoundingClientRect().top
+      const bottom =
+        nextHeading?.getBoundingClientRect().top ?? document.body.getBoundingClientRect().bottom
+      const isActive = top < viewportBottom && bottom > viewportTop
+
+      if (isActive) {
+        activeIds.add(heading.id)
+      }
+    })
+
+    if (activeIds.size === 0 && headings.length > 0) {
+      let closestHeading = headings[0]
+      let minDistance = Number.POSITIVE_INFINITY
+
+      headings.forEach(heading => {
+        const distance = Math.abs(heading.getBoundingClientRect().top - viewportTop)
+
+        if (distance < minDistance) {
+          minDistance = distance
+          closestHeading = heading
+        }
+      })
+
+      activeIds.add(closestHeading.id)
+    }
+
+    return activeIds
+  }
+
+  function getMaxTocScrollTop(toc: HTMLElement) {
+    return Math.max(0, toc.scrollHeight - toc.clientHeight)
+  }
+
+  function scrollTocTo(toc: HTMLElement, targetTop: number, immediate = false) {
+    const maxTop = getMaxTocScrollTop(toc)
+    const top = Math.max(0, Math.min(targetTop, maxTop))
+
+    if (
+      Math.abs(toc.scrollTop - top) < tocScrollJitterThreshold
+      && Math.abs(lastTocTargetTop - top) < tocScrollJitterThreshold
+    ) {
+      return
+    }
+
+    lastTocTargetTop = top
+    toc.scrollTo({
+      top,
+      left: 0,
+      behavior: immediate ? 'auto' : 'smooth',
+    })
+  }
+
+  function getActiveRangeTargetTop(
+    toc: HTMLElement,
+    activeLinks: HTMLElement[],
+  ) {
+    const tocRect = toc.getBoundingClientRect()
+    const topmost = activeLinks[0]
+    const bottommost = activeLinks[activeLinks.length - 1]
+    const topRect = topmost.getBoundingClientRect()
+    const bottomRect = bottommost.getBoundingClientRect()
+    const activeRangeHeight = bottomRect.bottom - topRect.top
+    const activeRangeFullyVisible =
+      topRect.top >= tocRect.top && bottomRect.bottom <= tocRect.bottom
+
+    if (activeRangeFullyVisible) {
+      return null
+    }
+
+    if (activeRangeHeight <= toc.clientHeight) {
+      if (topRect.top < tocRect.top) {
+        return topmost.offsetTop - tocScrollPadding
+      }
+
+      return (
+        bottommost.offsetTop
+        + bottommost.offsetHeight
+        + tocScrollPadding
+        - toc.clientHeight
+      )
+    }
+
+    const rangeTop = topmost.offsetTop
+    const rangeBottom = bottommost.offsetTop + bottommost.offsetHeight
+    const currentScrollTop = window.scrollY || document.documentElement.scrollTop
+    const isScrollingDown = currentScrollTop >= lastPageScrollTop
+
+    if (isScrollingDown) {
+      return rangeBottom + tocScrollPadding - toc.clientHeight
+    }
+
+    return rangeTop - tocScrollPadding
+  }
+
+  function scrollActiveLinksIntoView(
+    toc: HTMLElement,
+    activeLinks: HTMLElement[],
+    immediate = false,
+  ) {
+    const pageScrollState = getPageScrollState()
+
+    if (pageScrollState === 'top') {
+      scrollTocTo(toc, 0, true)
+      return
+    }
+
+    if (pageScrollState === 'bottom') {
+      scrollTocTo(toc, getMaxTocScrollTop(toc), true)
+      return
+    }
+
+    if (activeLinks.length === 0) {
+      return
+    }
+
+    const targetTop = getActiveRangeTargetTop(toc, activeLinks)
+
+    if (targetTop !== null) {
+      scrollTocTo(toc, targetTop, immediate)
+    }
+  }
+
+  function updateTocActiveState(
+    toc: HTMLElement,
+    links: HTMLAnchorElement[],
+    headings: HTMLElement[],
+  ) {
+    const activeHeadingIds = getActiveHeadingIds(headings)
+    const activeLinks: HTMLAnchorElement[] = []
+
+    links.forEach(link => {
+      const isActive = Boolean(link.dataset.slug && activeHeadingIds.has(link.dataset.slug))
+      link.classList.toggle('active', isActive)
+
+      if (isActive) {
+        activeLinks.push(link)
+      }
+    })
+
+    if (!isTocNavigating) {
+      scrollActiveLinksIntoView(toc, activeLinks)
+    }
+
+    lastPageScrollTop = window.scrollY || document.documentElement.scrollTop
+  }
+
+  function scheduleTocActiveUpdate(
+    toc: HTMLElement,
+    links: HTMLAnchorElement[],
+    headings: HTMLElement[],
+  ) {
+    if (activeUpdateFrame) {
+      return
+    }
+
+    activeUpdateFrame = window.requestAnimationFrame(() => {
+      activeUpdateFrame = null
+      updateTocActiveState(toc, links, headings)
+    })
+  }
 
   function setupBlogPost() {
     cleanupBlogPost()
 
     const toc = document.getElementById('toc')
     const body = document.body
+    const links = toc
+      ? Array.from(toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'))
+      : []
+    const headings = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        '.prose h1[id], .prose h2[id], .prose h3[id]',
+      ),
+    )
 
     scrollHandler = (_: Event) => {
       if (window.scrollY > 50) {
@@ -94,42 +316,29 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
       } else {
         body.classList.remove('scrolled')
       }
+
+      if (toc && links.length > 0 && headings.length > 0) {
+        scheduleTocActiveUpdate(toc, links, headings)
+      }
     }
 
     window.addEventListener('scroll', scrollHandler, { passive: true })
+    scrollHandler(new Event('scroll'))
 
-    if (toc) {
-      const links = toc.querySelectorAll('a')
-      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+    if (toc && links.length > 0 && headings.length > 0) {
+      resizeHandler = (_: Event) => {
+        lastTocTargetTop = -1
+        scheduleTocActiveUpdate(toc, links, headings)
+      }
+      window.addEventListener('resize', resizeHandler, { passive: true })
 
       observer = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            const id = entry.target.id
-            const activeLink = Array.from(links).find(
-              link => link.getAttribute('data-slug') === id,
-            )
-            if (activeLink) {
-              if (entry.isIntersecting) {
-                activeLink.classList.add('active')
-                const tocRect = toc.getBoundingClientRect()
-                const linkRect = activeLink.getBoundingClientRect()
-
-                if (linkRect.top < tocRect.top) {
-                  toc.scrollTop += linkRect.top - tocRect.top - linkRect.height
-                } else if (linkRect.bottom > tocRect.bottom) {
-                  toc.scrollTop +=
-                    linkRect.bottom - tocRect.bottom + linkRect.height
-                }
-              } else {
-                activeLink.classList.remove('active')
-              }
-            }
-          })
+        () => {
+          scheduleTocActiveUpdate(toc, links, headings)
         },
         {
-          rootMargin: '-100px 0% 0%',
-          threshold: 0,
+          rootMargin: `-${scrollOffset}px 0px -60% 0px`,
+          threshold: [0, 1],
         },
       )
 
@@ -138,24 +347,41 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
       })
 
       links.forEach(link => {
-        const handler = (e: { preventDefault: () => void }) => {
+        const handler = (e: MouseEvent) => {
           e.preventDefault()
-          const targetId = link.getAttribute('href')?.slice(1)
-          const targetElement = document.getElementById(targetId ?? '')
+          const targetId = getLinkTargetId(link)
+          const targetElement = document.getElementById(targetId)
+
           if (targetElement) {
-            const offset = 80
+            isTocNavigating = true
+            links.forEach(item => {
+              item.classList.toggle('active', item === link)
+            })
+            scrollActiveLinksIntoView(toc, [link], true)
+
             const elementPosition = targetElement.getBoundingClientRect().top
-            const offsetPosition = elementPosition + window.pageYOffset - offset
+            const offsetPosition =
+              elementPosition + window.pageYOffset - scrollOffset
 
             window.scrollTo({
               top: offsetPosition,
               behavior: 'smooth',
             })
+
+            if (tocNavigationTimeout) {
+              window.clearTimeout(tocNavigationTimeout)
+            }
+            tocNavigationTimeout = window.setTimeout(() => {
+              isTocNavigating = false
+              scheduleTocActiveUpdate(toc, links, headings)
+            }, 700)
           }
         }
         link.addEventListener('click', handler)
         clickHandlers.push({ el: link, handler })
       })
+
+      updateTocActiveState(toc, links, headings)
     }
   }
 
@@ -164,10 +390,25 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
       window.removeEventListener('scroll', scrollHandler)
       scrollHandler = null
     }
+    if (resizeHandler) {
+      window.removeEventListener('resize', resizeHandler)
+      resizeHandler = null
+    }
     if (observer) {
       observer.disconnect()
       observer = null
     }
+    if (activeUpdateFrame) {
+      window.cancelAnimationFrame(activeUpdateFrame)
+      activeUpdateFrame = null
+    }
+    lastPageScrollTop = 0
+    lastTocTargetTop = -1
+    if (tocNavigationTimeout) {
+      window.clearTimeout(tocNavigationTimeout)
+      tocNavigationTimeout = null
+    }
+    isTocNavigating = false
     clickHandlers.forEach(({ el, handler }) => {
       el.removeEventListener('click', handler)
     })
@@ -175,8 +416,16 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     document.body.classList.remove('scrolled')
   }
 
+  globalWindow.__kinoBlogPostCleanup?.()
+
   document.addEventListener('astro:page-load', setupBlogPost)
   document.addEventListener('astro:before-swap', cleanupBlogPost)
+
+  globalWindow.__kinoBlogPostCleanup = () => {
+    cleanupBlogPost()
+    document.removeEventListener('astro:page-load', setupBlogPost)
+    document.removeEventListener('astro:before-swap', cleanupBlogPost)
+  }
 </script>
 
 <style>
@@ -187,14 +436,6 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     display: flex;
     justify-content: center;
     gap: 2em;
-  }
-  .hero-image {
-    width: 100%;
-  }
-  .hero-image img {
-    display: block;
-    margin: 0 auto;
-    border-radius: 12px;
   }
   .prose {
     width: 100dvw;
@@ -285,13 +526,22 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
   }
 
   .toc {
+    max-height: calc(100dvh - 75px - 8em);
+    overflow-x: hidden;
     overflow-y: auto;
+    overscroll-behavior: contain;
     scrollbar-gutter: stable;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
-  body.scrolled .toc {
+  :global(body.scrolled) .contents {
     top: 5em;
-    max-height: calc(100dvh - 80px);
+    max-height: calc(100dvh - 80px - 2em);
+  }
+
+  :global(body.scrolled) .toc {
+    max-height: calc(100dvh - 80px - 6em);
   }
   .toc ul {
     list-style: none;
@@ -306,8 +556,11 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
     padding: 0.2em 0.4em;
     color: var(--primary-dark);
     text-decoration: none;
-    /* border-radius: 4px; */
-    transition: all 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
     border-left: 3px solid transparent;
   }
 
