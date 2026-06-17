@@ -10,32 +10,46 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '')
   a {
     color: inherit;
     text-decoration: none;
-    padding: 10px 5px;
+    padding: 8px 16px;
     display: block;
     position: relative;
-    margin-left: 20px;
-    min-width: 70px;
+    margin-left: 12px;
+    min-width: 60px;
     text-align: center;
     user-select: none;
     font-weight: 600;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    transition: 0.2s ease;
+    box-sizing: border-box;
 
     &:not(.selected) {
       opacity: 0.7;
     }
+
+    &:hover {
+      opacity: 1;
+    }
+
     &::before {
       content: '';
       position: absolute;
       transition: transform 0.3s ease;
-      left: 0;
-      bottom: 0;
-      width: 100%;
+      left: 8px;
+      right: 8px;
+      bottom: 2px;
       height: 2px;
-      background: var(--text-secondary);
+      background: var(--primary);
       transform: scaleX(0);
+      border-radius: 1px;
+    }
+
+    &.selected {
+      opacity: 1;
     }
 
     &:hover::before,
-    .selected::before {
+    &.selected::before {
       transform: scaleX(1);
     }
   }
@@ -45,6 +59,11 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '')
     letter-spacing: 0.04em;
     opacity: 1;
     transform: skewX(-8deg);
+    border: 2px solid var(--p5-white);
+    border-radius: 0;
+    padding: 8px 18px;
+    background: transparent;
+    box-shadow: 0.2rem 0.2rem 0 var(--primary);
   }
 
   :global(.theme-dark) a:not(.selected) {
@@ -56,6 +75,19 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '')
     background: var(--primary);
     box-shadow: 0 -0.25rem 0 var(--p5-white);
     transform-origin: left;
+    left: 18px;
+    right: 18px;
+  }
+
+  :global(.theme-dark) a:hover {
+    background: var(--primary);
+    box-shadow: 0.35rem 0.35rem 0 var(--p5-white);
+    transform: translate(-0.08rem, -0.08rem) skewX(-8deg);
+  }
+
+  :global(.theme-dark) a.selected {
+    background: var(--primary);
+    box-shadow: 0.35rem 0.35rem 0 var(--p5-white);
   }
 
   :global(.theme-dark) a:hover,

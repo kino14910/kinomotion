@@ -2,9 +2,10 @@
   import Noise from './noise.js'
 
   let container = $state(null)
+  let canvasEl = $state(null)
+  let ctx = null
   let width = $state(0)
   let height = $state(0)
-  let pathStrings = $state([])
   let pointerX = $state(-10)
   let pointerY = $state(0)
 
@@ -23,6 +24,12 @@
   let lines = []
   let noise = new Noise(Math.random())
   let rafId
+  let strokeColor = ''
+
+  function readStrokeColor() {
+    if (!container) return
+    strokeColor = getComputedStyle(container).getPropertyValue('--wavy-stroke').trim()
+  }
 
   function setLines() {
     if (width <= 0 || height <= 0) return
@@ -93,31 +100,42 @@
           p.cursor.vy += Math.sin(mouse.a) * f * limit * mouse.vs * 0.00065
         }
 
-        p.cursor.vx += (0 - p.cursor.x) * 0.005
-        p.cursor.vy += (0 - p.cursor.y) * 0.005
-        p.cursor.vx *= 0.925
-        p.cursor.vy *= 0.925
+        p.cursor.vx += (0 - p.cursor.x) * 0.0016
+        p.cursor.vy += (0 - p.cursor.y) * 0.0016
+        p.cursor.vx *= 0.96
+        p.cursor.vy *= 0.96
         p.cursor.x += p.cursor.vx * 2
         p.cursor.y += p.cursor.vy * 2
         p.cursor.x = Math.max(-100, Math.min(100, p.cursor.x))
         p.cursor.y = Math.max(-100, Math.min(100, p.cursor.y))
       }
     }
+  }
 
-    pathStrings = lines.map(points => {
-      const p1 = moved(points[0], false)
-      let d = `M ${p1.x} ${p1.y}`
-      points.forEach((p, i) => {
-        const isLast = i === points.length - 1
-        const pos = moved(p, !isLast)
-        d += ` L ${pos.x} ${pos.y}`
-      })
-      return d
-    })
+  function drawLines() {
+    if (!ctx) return
+
+    ctx.clearRect(0, 0, width, height)
+    ctx.beginPath()
+    ctx.strokeStyle = strokeColor
+    ctx.lineWidth = 1
+
+    for (const points of lines) {
+      const p0 = moved(points[0], false)
+      ctx.moveTo(p0.x, p0.y)
+
+      for (let i = 1; i < points.length; i++) {
+        const pos = moved(points[i], i < points.length - 1)
+        ctx.lineTo(pos.x, pos.y)
+      }
+    }
+
+    ctx.stroke()
   }
 
   function tick(time) {
     updatePhysics(time)
+    drawLines()
     rafId = requestAnimationFrame(tick)
   }
 
@@ -149,8 +167,33 @@
     )
   }
 
-  $effect(() => {
+  function onResize() {
+    if (!canvasEl) return
+    const dpr = window.devicePixelRatio || 1
+    canvasEl.width = width * dpr
+    canvasEl.height = height * dpr
+    canvasEl.style.width = width + 'px'
+    canvasEl.style.height = height + 'px'
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     setLines()
+  }
+
+  $effect(() => {
+    if (canvasEl) {
+      ctx = canvasEl.getContext('2d')
+      readStrokeColor()
+
+      // Re-read color when theme changes
+      const observer = new MutationObserver(readStrokeColor)
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+      return () => observer.disconnect()
+    }
+  })
+
+  $effect(() => {
+    width
+    height
+    onResize()
   })
 
   $effect(() => {
@@ -177,15 +220,12 @@
     style:--y="{pointerY}px"
   ></div>
 
-  <svg style:width="{width}px" style:height="{height}px">
-    {#each pathStrings as d, i (i)}
-      <path class="a__line" {d} />
-    {/each}
-  </svg>
+  <canvas bind:this={canvasEl}></canvas>
 </div>
 
 <style>
   .home-wavy-lines {
+    --wavy-stroke: var(--text-main);
     position: relative;
     max-width: 100dvw;
     height: 60dvh;
@@ -209,9 +249,8 @@
   }
 
   :global(.theme-dark) .home-wavy-lines {
+    --wavy-stroke: var(--p5-black);
     background: var(--p5-red);
-    border-top: 10px solid var(--primary);
-    border-bottom: 10px solid var(--p5-white);
   }
 
   :global(.theme-dark) .pointer-dot {
@@ -223,18 +262,8 @@
     box-shadow: 0.18rem 0.18rem 0 var(--p5-white);
   }
 
-  svg {
+  canvas {
     display: block;
     pointer-events: none;
-  }
-
-  .a__line {
-    fill: none;
-    stroke: var(--text-main);
-    stroke-width: 1px;
-  }
-
-  :global(.theme-dark) .a__line {
-    stroke: var(--p5-black);
   }
 </style>

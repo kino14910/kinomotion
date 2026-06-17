@@ -3,8 +3,13 @@
   <div class="home-container">
     <div class="home-copy">
       <h1>Kino Motion</h1>
-      <p>Learn more <a href="/about">about me -></a></p>
+      <p>Interaction Lab by Kino</p>
     </div>
+  </div>
+  <div class="scroll-hint">
+    <svg class="scroll-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 5v14M5 12l7 7 7-7" />
+    </svg>
   </div>
 </main>
 
@@ -136,5 +141,39 @@
       margin-top: 4rem;
       text-align: left;
     }
+  }
+
+  /* Scroll hint */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    animation: breathe 2s ease-in-out infinite;
+  }
+
+  .scroll-arrow {
+    animation: bob 2s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.4; }
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+
+  :global(.theme-dark) .scroll-hint {
+    color: var(--p5-white);
+    opacity: 0.5;
   }
 </style>

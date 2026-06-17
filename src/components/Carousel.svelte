@@ -147,7 +147,7 @@
   role="main"
 >
   <div class="home-photos-container">
-    <h4 class="banner">POKER</h4>
+    <h4 class="title">POKER</h4>
     <div class="home-photos-plates" bind:this={container}>
       {#each cards as card, index (card.id)}
         <div
@@ -217,7 +217,7 @@
     height: 100%;
   }
 
-  .banner {
+  .title {
     display: block;
     font-size: 12rem;
     font-family: 'Impact Regular';
@@ -228,7 +228,7 @@
     transform: scaleY(70%);
   }
 
-  :global(.theme-dark) .banner {
+  :global(.theme-dark) .title {
     color: var(--p5-white);
     -webkit-text-stroke: 0.12rem var(--p5-black);
     text-shadow:

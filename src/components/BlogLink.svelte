@@ -13,12 +13,6 @@
 </a>
 
 <style>
-  .title {
-    margin: 0;
-    color: var(--text-main);
-    line-height: 1;
-  }
-
   * {
     text-decoration: none;
     transition: 0.2s ease;
@@ -26,12 +20,23 @@
 
   a {
     display: block;
+    padding: 1rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    min-height: 100%;
+    box-sizing: border-box;
+  }
+
+  a:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 16px rgba(0 0 0 / 0.06);
+    transform: translateY(-2px);
   }
 
   .title {
     margin: 0;
     color: var(--text-main);
-    line-height: 1;
+    line-height: 1.3;
     position: relative;
     display: inline-block;
   }
@@ -67,8 +72,9 @@
   }
 
   .date {
-    margin: 0;
+    margin: 0.35rem 0 0;
     color: var(--primary-gray);
+    font-size: 0.875rem;
   }
 
   a:hover h6,
@@ -76,13 +82,13 @@
     color: var(--primary);
   }
 
+  /* Dark theme */
   :global(.theme-dark) a {
-    min-height: 100%;
     padding: 1rem 2rem;
     background: var(--p5-black);
     border: 3px solid var(--p5-white);
+    border-radius: 0;
     box-shadow: 0.35rem 0.35rem 0 var(--primary);
-    /* clip-path: polygon(0.8rem 0, 100% 0, calc(100% - 0.8rem) 100%, 0 100%); */
     transform: skewX(-5deg);
   }
 

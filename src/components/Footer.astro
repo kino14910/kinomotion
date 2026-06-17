@@ -1,71 +1,185 @@
 ---
 const today = new Date()
-interface Props {
-  style?: string
-}
 ---
 
 <footer>
-  &copy; {today.getFullYear()} Kino. All rights reserved.
+  <div class="wave-container">
+<svg class="wave-svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+  <path class="wave wave-1" d="M0,60 C240,10 480,120 720,60 C960,10 1200,120 1440,60 L1440,120 L0,120 Z" />
+  <path class="wave wave-2" d="M0,65 C240,120 480,15 720,65 C960,120 1200,15 1440,65 L1440,120 L0,120 Z" />
+</svg>
+  </div>
 
-  <div class='social-links'>
-    <a
-      href='https://github.com/kino14910'
-      target='_blank'
-      rel='noopener noreferrer'
-      aria-label='github link'
-    >
-      <svg
-        aria-hidden='true'
-        viewBox='0 0 16 16'
-        aria-hidden='true'
-        width='32'
-        height='32'
-        astro-icon='social/github'
-        ><path
-          fill='currentColor'
-          d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z'
-        ></path></svg
+  <div class="footer-content">
+    <p class="made-with">
+      <span class="typed-text">Made with</span>
+      <span class="heart">♥</span>
+      <span class="typed-text">&amp; caffeine</span>
+    </p>
+
+    <p class="copyright">&copy; {today.getFullYear()} Kino. All rights reserved.</p>
+
+    <div class="footer-links">
+      <a
+        href="https://github.com/kino14910"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="github link"
       >
-    </a>
+        <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+          />
+        </svg>
+      </a>
+    </div>
   </div>
 </footer>
+
 <style>
   footer {
-    padding: 2em 1em;
-    background: linear-gradient(var(--primary-gray-gradient)) no-repeat;
-    color: var(--primary-gray);
-    text-align: center;
-  }
-  .social-links {
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-    margin-top: 1em;
-  }
-  .social-links a {
-    text-decoration: none;
-    color: var(--primary-gray);
-  }
-  .social-links a:hover {
-    color: var(--on-primary);
+    position: relative;
+    background: var(--surface-variant);
+    color: var(--text-secondary);
+    overflow: hidden;
   }
 
+  /* ---- SVG Wave ---- */
+  .wave-container {
+    height: 48px;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .wave-svg {
+    display: block;
+    width: 200%;
+    height: 100%;
+  }
+
+  .wave {
+    fill: var(--primary);
+    opacity: 0.32;
+  }
+  
+.wave-1 {
+    animation: wave-drift 10s linear infinite;
+  }
+
+  .wave-2 {
+    opacity: 0.16;
+    animation: wave-drift 14s linear infinite reverse;
+    animation-delay: -2s;
+  }
+
+  @keyframes wave-drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---- Content ---- */
+  .footer-content {
+    padding: 2rem 1.5rem 2.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  /* Typewriter text */
+  .made-with {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    margin: 0;
+    color: var(--text-main);
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: typing 2s steps(22, end) 0.5s forwards;
+  }
+
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 14.5em; }
+  }
+
+  .heart {
+    display: inline-block;
+    color: var(--primary);
+  }
+
+  .copyright {
+    font-size: 0.75rem;
+    margin: 0;
+    opacity: 0.7;
+  }
+
+  /* Links */
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.15s;
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-links a:hover {
+    color: var(--primary);
+  }
+
+  /* ---- Dark Theme ---- */
   :global(.theme-dark) footer {
-    background: linear-gradient(var(--primary-gray-gradient)) no-repeat;
+    background: var(--p5-black);
+  }
+
+  :global(.theme-dark) .wave {
+    fill: var(--primary);
+    opacity: 0.32;
+  }
+
+  :global(.theme-dark) .wave-2 {
+    opacity: 0.16;
+  }
+
+  :global(.theme-dark) .footer-content {
     color: var(--p5-white);
-    box-shadow: inset 0 0.45rem 0 var(--primary);
-    font-weight: 800;
+  }
+
+  :global(.theme-dark) .made-with {
+    color: var(--p5-white);
+    font-weight: 700;
     text-transform: uppercase;
   }
 
-  :global(.theme-dark) .social-links a {
+  :global(.theme-dark) .copyright {
     color: var(--p5-white);
-    filter: drop-shadow(0.14rem 0.14rem 0 var(--primary));
+    opacity: 0.6;
   }
 
-  :global(.theme-dark) .social-links a:hover {
-    color: var(--primary);
-    filter: drop-shadow(0.14rem 0.14rem 0 var(--p5-white));
+  :global(.theme-dark) .footer-links a {
+    color: var(--p5-white);
+    opacity: 0.85;
+    filter: drop-shadow(0.08rem 0.08rem 0 var(--primary));
   }
+
+  :global(.theme-dark) .footer-links a:hover {
+    color: var(--primary);
+    opacity: 1;
+    filter: drop-shadow(0.12rem 0.12rem 0 var(--p5-white));
+  }
+
 </style>

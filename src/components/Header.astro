@@ -57,6 +57,8 @@ import Nav from './Nav.astro'
     background: var(--bg-color);
     max-width: 100%;
     padding: 0 10%;
+    border-bottom: 4px solid var(--primary);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 0.45rem), 92% 100%, 0 100%);
   }
 
   :global(.theme-dark) header {
@@ -65,9 +67,7 @@ import Nav from './Nav.astro'
 
   :global(.theme-dark) header.scrolled {
     background: var(--p5-black);
-    border-bottom: 4px solid var(--primary);
     box-shadow: 0 0.35rem 0 var(--p5-white);
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 0.45rem), 92% 100%, 0 100%);
   }
 
   @media screen and (max-width: 520px) {
