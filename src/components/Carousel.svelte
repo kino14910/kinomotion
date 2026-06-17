@@ -219,7 +219,7 @@
 
   .title {
     display: block;
-    font-size: 12rem;
+    font-size: clamp(6rem, 13vw, 12rem);
     font-family: 'Impact Regular';
     font-weight: 400;
     color: transparent;

@@ -95,7 +95,7 @@
     margin: 0 0 0.2em;
     color: var(--p5-white);
     font-family: 'Impact Regular';
-    font-size: clamp(4rem, 13vw, 12rem);
+    font-size: clamp(6rem, 13vw, 12rem);
     font-weight: 400;
     line-height: 0.84;
     text-transform: uppercase;
@@ -125,6 +125,10 @@
   }
 
   @media (max-width: 800px) {
+    .background {
+      background-position: 80% center;
+    }
+
     .home-container {
       flex-direction: column;
     }

@@ -131,7 +131,7 @@
     position: relative;
     display: block;
     font-family: "Impact Regular", Impact, sans-serif;
-    font-size: clamp(4rem, 12vw, 12rem);
+    font-size: clamp(6rem, 13vw, 12rem);
     transform: scaleY(70%);
   }
 
@@ -326,9 +326,6 @@
   }
 
   @media (max-width: 700px) {
-    .about-title {
-      font-size: clamp(4rem, 20vw, 8rem);
-    }
     .about-body {
       grid-template-columns: 1fr;
       gap: 2rem;
@@ -402,14 +399,9 @@
     box-shadow: 0 0 6px var(--primary);
   }
 
-  :global(.theme-dark) .about-body {
-    transform: skewX(-2deg);
-  }
-
   :global(.theme-dark) .avatar-frame {
     border-color: var(--p5-white);
     background: var(--p5-ink, var(--p5-black));
-    transform: rotate(-4deg);
     padding: 10px;
   }
 
@@ -428,7 +420,6 @@
   :global(.theme-dark) .spec-block {
     border-left-color: var(--primary);
     background: var(--p5-white);
-    transform: skewX(2deg);
     padding: 1.1rem 1.4rem 1.1rem 3.2rem;
     box-shadow: 0.4rem 0.4rem 0 var(--primary);
   }
