@@ -1,5 +1,6 @@
 <script>
   import Lenis from 'lenis'
+  import { setLenis } from '@/lib/lenis'
 
   let { minThumbHeight = 40, hoverToShow = false } = $props()
 
@@ -53,12 +54,14 @@
     updateDimensions()
     resizeObserver.observe(document.documentElement)
     lenis = lenisInstance
+    setLenis(lenisInstance)
 
     return () => {
       lenisInstance.destroy()
       resizeObserver.disconnect()
       clearTimeout(scrollingTimeout)
       lenis = null
+      setLenis(null)
     }
   })
 

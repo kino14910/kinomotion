@@ -10,7 +10,7 @@ const description = 'Frontend Interaction Lab by Kino'
 ---
 
 <Layout title={title} description={description}>
-  <Welcome />
+  <Welcome client:load />
   <AboutSection client:only />
   <Carousel client:only />
   <WavyLines client:only />

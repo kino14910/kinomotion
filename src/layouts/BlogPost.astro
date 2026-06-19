@@ -1,6 +1,7 @@
 ---
 import BackToTop from '@/components/BackToTop.svelte'
 import FormattedDate from '@/components/FormattedDate.svelte'
+import { Image } from 'astro:assets'
 import type { MarkdownHeading } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 import Layout from './Layout.astro'
@@ -13,13 +14,23 @@ const {
   description,
   pubDate,
   updatedDate,
+  heroImage,
+  tags,
   headings,
 } = Astro.props
 
-const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
+const filteredHeadings = headings?.filter(h => h.depth >= 2 && h.depth <= 3) || []
 ---
 
-<Layout title={title} description={description}>
+<Layout
+  title={title}
+  description={description}
+  image={heroImage}
+  type='article'
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  tags={tags}
+>
   <main>
     {
       filteredHeadings.length > 0 && (
@@ -56,8 +67,16 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
             }
           </div>
           <h1 data-text={title}>{title}</h1>
+          {tags && tags.length > 0 && (
+            <ul class='tags'>
+              {tags.map(tag => <li class='tag'>#{tag}</li>)}
+            </ul>
+          )}
           <hr />
         </div>
+        {heroImage && (
+          <Image src={heroImage} alt={title} class='hero-image' />
+        )}
         <slot />
       </div>
     </article>
@@ -66,6 +85,8 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
 </Layout>
 
 <script>
+  import { scrollTo } from '@/lib/lenis'
+
   let scrollHandler: ((e: Event) => void) | null
   let resizeHandler: ((e: Event) => void) | null
   let observer: IntersectionObserver | null = null
@@ -363,10 +384,7 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
             const offsetPosition =
               elementPosition + window.pageYOffset - scrollOffset
 
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth',
-            })
+            scrollTo(offsetPosition)
 
             if (tocNavigationTimeout) {
               window.clearTimeout(tocNavigationTimeout)
@@ -484,6 +502,41 @@ const filteredHeadings = headings?.filter(h => h.depth <= 3) || []
   }
   .last-updated-on {
     font-style: italic;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin: 0.5em 0 0;
+    padding: 0;
+    list-style: none;
+    -webkit-padding-start: 0;
+  }
+  .tag {
+    margin: 0;
+    padding: 0.2em 0.6em;
+    font-size: 0.85em;
+    color: var(--on-primary-container);
+    background: var(--primary-container);
+    border-radius: 4px;
+  }
+  :global(.theme-dark) .tag {
+    background: var(--p5-white);
+    color: var(--p5-black);
+    border-radius: 0;
+    font-weight: 800;
+    box-shadow: 0.18rem 0.18rem 0 var(--primary);
+  }
+  .hero-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 0 0 1.5em;
+  }
+  :global(.theme-dark) .hero-image {
+    border: 3px solid var(--p5-white);
+    border-radius: 0;
+    box-shadow: 0.4rem 0.4rem 0 var(--primary);
   }
   aside {
     position: sticky;

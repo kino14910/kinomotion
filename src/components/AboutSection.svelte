@@ -16,7 +16,7 @@
       charsClass: "split-char",
     })
 
-    gsap.from(split.chars, {
+    const tween = gsap.from(split.chars, {
       autoAlpha: 0,
       duration: 0.01,
       stagger: 0.025,
@@ -27,7 +27,9 @@
     })
 
     return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill())
+      tween.scrollTrigger?.kill()
+      tween.kill()
+      split.revert()
     }
   })
 </script>

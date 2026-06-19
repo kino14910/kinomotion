@@ -323,7 +323,6 @@ p a:hover {
 img {
   max-width: 100%;
   height: auto;
-  pointer-events: none;
 }
 
 img,
@@ -332,6 +331,10 @@ a * {
   user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
+}
+
+a img {
+  pointer-events: none;
 }
 
 hr {

@@ -168,7 +168,7 @@
   }
 
   function onResize() {
-    if (!canvasEl) return
+    if (!canvasEl || !ctx) return
     const dpr = window.devicePixelRatio || 1
     canvasEl.width = width * dpr
     canvasEl.height = height * dpr
@@ -181,6 +181,7 @@
   $effect(() => {
     if (canvasEl) {
       ctx = canvasEl.getContext('2d')
+      onResize()
       readStrokeColor()
 
       // Re-read color when theme changes

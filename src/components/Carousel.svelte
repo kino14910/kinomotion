@@ -2,9 +2,9 @@
   import { SvelteMap } from 'svelte/reactivity'
   import type { Attachment } from 'svelte/attachments'
 
-  const imageCount = 9
+  const imageCount = 10
   let imgs = $state(
-    Array.from({ length: imageCount }, (_, i) => `assets/pokers/poker${i}.jpg`),
+    Array.from({ length: imageCount }, (_, i) => `/assets/pokers/poker${i}.jpg`),
   )
   let imgIndex = $state(5)
   let transformDatas = [
@@ -139,12 +139,11 @@
   }
 </script>
 
-<div
+<main
   class="home-photos"
   onpointermove={handlePointerMove}
   onpointerup={handlePointerUp}
   onpointercancel={handlePointerUp}
-  role="main"
 >
   <div class="home-photos-container">
     <h4 class="title">POKER</h4>
@@ -195,7 +194,7 @@
       </div>
     </div>
   </div>
-</div>
+</main>
 
 <style>
   .home-photos {

@@ -1,13 +1,17 @@
 <script>
   import { onMount } from 'svelte'
 
-  let theme = $state('light')
+  let theme = $state(
+    typeof document !== 'undefined' && document.documentElement.classList.contains('theme-dark')
+      ? 'dark'
+      : 'light'
+  )
 
   onMount(() => {
     const storedTheme = localStorage.getItem('theme')
-    if (storedTheme) {
+    if (storedTheme && storedTheme !== theme) {
       theme = storedTheme
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    } else if (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       theme = 'dark'
     }
   })

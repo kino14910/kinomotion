@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { scrollTo } from '@/lib/lenis'
+
   let visible = $state(false)
 
   function handleScroll() {
@@ -6,10 +8,7 @@
   }
 
   function scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
+    scrollTo(0)
   }
 </script>
 
