@@ -3,12 +3,18 @@ import BackToTop from '@/components/BackToTop.svelte'
 import FormattedDate from '@/components/FormattedDate.svelte'
 import { Image } from 'astro:assets'
 import type { MarkdownHeading } from 'astro'
-import type { CollectionEntry } from 'astro:content'
 import Layout from './Layout.astro'
 
-type Props = CollectionEntry<'note'>['data'] & {
+interface Props {
+  title: string
+  description: string
+  pubDate: Date
+  updatedDate?: Date
+  heroImage?: ImageMetadata
+  tags?: string[]
   headings?: MarkdownHeading[]
 }
+
 const {
   title,
   description,
@@ -20,6 +26,35 @@ const {
 } = Astro.props
 
 const filteredHeadings = headings?.filter(h => h.depth >= 2 && h.depth <= 3) || []
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString()
+const imageURL = heroImage ? new URL(heroImage.src, Astro.site).toString() : ''
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": imageURL ? [imageURL] : [],
+  "datePublished": pubDate.toISOString(),
+  "dateModified": updatedDate ? updatedDate.toISOString() : pubDate.toISOString(),
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": canonicalURL
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Kino-HOME"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Kino-HOME",
+    "logo": {
+      "@type": "ImageObject",
+      "url": new URL('/favicon.ico', Astro.site).toString()
+    }
+  }
+}
 ---
 
 <Layout
@@ -31,6 +66,7 @@ const filteredHeadings = headings?.filter(h => h.depth >= 2 && h.depth <= 3) || 
   modifiedTime={updatedDate}
   tags={tags}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
   <main>
     {
       filteredHeadings.length > 0 && (

@@ -6,10 +6,11 @@ import { defineConfig } from 'astro/config';
 import rehypeExternalLinks from 'rehype-external-links';
 import remarkGfm from 'remark-gfm';
 import remarkSmartypants from 'remark-smartypants';
+import rehypeSlug from 'rehype-slug';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://kinomotion.vercel.app',
+  site: 'https://kinomotion.pages.dev',
   integrations: [mdx(), sitemap(), svelte()],
   markdown: {
     shikiConfig: {
@@ -18,11 +19,12 @@ export default defineConfig({
     processor: unified({
       remarkPlugins: [remarkGfm, remarkSmartypants],
       rehypePlugins: [
+        rehypeSlug,
         [
           rehypeExternalLinks,
           {
             target: '_blank',
-            rel: ['nofollow', 'noopener', 'noreferrer'],
+            rel: ['noopener', 'noreferrer'],
           },
         ],
       ],
