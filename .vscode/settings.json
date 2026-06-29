@@ -1,3 +1,6 @@
 {
-  "Codegeex.RepoIndex": true
+  "prettier.singleQuote": true,
+  "prettier.semi": false,
+  "prettier.printWidth": 120,
+  "prettier.jsxSingleQuote": true
 }

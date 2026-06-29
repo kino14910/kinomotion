@@ -27,6 +27,7 @@ const {
 
 <Layout title={title} description={description}>
   <main>
+    <h1 class="page-title">{title}</h1>
     <section>
       <ul>
         {
@@ -63,6 +64,12 @@ const {
     width: 100%;
     display: flex;
     flex-direction: column;
+  }
+
+  .page-title {
+    margin: 0 0 1em;
+    color: var(--text-main);
+    font-size: clamp(1.5rem, 3vw, 2rem);
   }
 
   ul {

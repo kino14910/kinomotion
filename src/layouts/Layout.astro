@@ -4,6 +4,7 @@ import Head from '@/components/Head.astro'
 import Header from '@/components/Header.astro'
 import Loader from '@/components/Loader.svelte'
 import ScrollBar from '@/components/ScrollBar.svelte'
+import { SITE_DESCRIPTION, SITE_TITLE } from '@/consts'
 import type { ImageMetadata } from 'astro'
 import 'lenis/dist/lenis.css'
 
@@ -25,6 +26,23 @@ const {
   modifiedTime,
   tags,
 } = Astro.props
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": SITE_TITLE,
+  "description": SITE_DESCRIPTION,
+  "url": Astro.site?.toString() ?? '',
+  "inLanguage": "zh-CN",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": `${Astro.site?.toString() ?? ''}/note/?q={search_term_string}`
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
 ---
 
 <html lang='zh-CN'>
@@ -38,6 +56,7 @@ const {
       modifiedTime={modifiedTime}
       tags={tags}
     />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
   </head>
   <body>
     <div class='layout' id='main-content'>

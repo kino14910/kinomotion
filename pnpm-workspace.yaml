@@ -1,3 +1,6 @@
 allowBuilds:
   esbuild: true
   sharp: true
+  ttf2woff2: set this to true or false
+minimumReleaseAgeExclude:
+  - astro@7.0.3

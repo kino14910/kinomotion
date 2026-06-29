@@ -2,36 +2,65 @@
 import Logo from './Logo.astro'
 import Nav from './Nav.astro'
 ---
-
-<script is:inline>
-  window.__kinoHeaderScrollCleanup?.()
-
-  const syncHeaderScroll = () => {
-    document
-      .querySelector('header')
-      ?.classList.toggle('scrolled', window.scrollY > 50)
-  }
-
-  window.addEventListener('scroll', syncHeaderScroll, { passive: true })
-  document.addEventListener('astro:page-load', syncHeaderScroll)
-  document.addEventListener('astro:before-swap', syncHeaderScroll)
-
-  window.__kinoHeaderScrollCleanup = () => {
-    window.removeEventListener('scroll', syncHeaderScroll)
-    document.removeEventListener('astro:page-load', syncHeaderScroll)
-    document.removeEventListener('astro:before-swap', syncHeaderScroll)
-  }
-
-  syncHeaderScroll()
-</script>
-
 <div class='header-placeholder'></div>
+
 <header>
   <div class='logo'>
     <Logo />
   </div>
+
   <Nav />
 </header>
+
+<script is:inline>
+  window.__kinoHeaderScrollCleanup?.()
+
+  let ticking = false
+  let lastScrolled = false
+
+  const updateHeaderState = () => {
+    ticking = false
+
+    const scrolled = window.scrollY > 50
+
+    if (scrolled === lastScrolled) {
+      return
+    }
+
+    lastScrolled = scrolled
+
+    document.documentElement.toggleAttribute('data-scrolled', scrolled)
+  }
+
+  const onScroll = () => {
+    if (ticking) {
+      return
+    }
+
+    ticking = true
+
+    requestAnimationFrame(updateHeaderState)
+  }
+
+  const init = () => {
+    updateHeaderState()
+  }
+
+  window.addEventListener('scroll', onScroll, {
+    passive: true,
+  })
+
+  document.addEventListener('astro:page-load', init)
+  document.addEventListener('astro:before-swap', init)
+
+  window.__kinoHeaderScrollCleanup = () => {
+    window.removeEventListener('scroll', onScroll)
+    document.removeEventListener('astro:page-load', init)
+    document.removeEventListener('astro:before-swap', init)
+  }
+
+  init()
+</script>
 
 <style>
   .header-placeholder {
@@ -45,18 +74,27 @@ import Nav from './Nav.astro'
     right: 0;
     display: flex;
     margin: 0 auto;
+    width: 100%;
     max-width: 1400px;
     padding: 2em;
-    width: 100%;
-    transition: all 0.3s ease;
     z-index: 99;
+    container-type: inline-size;
+    container-name: header;
+    will-change: padding, background, clip-path;
+    backface-visibility: hidden;
+    transition:
+      padding 0.3s ease,
+      max-width 0.3s ease,
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      clip-path 0.3s ease;
   }
 
-  header.scrolled {
-    padding: 0;
-    background: var(--bg-color);
+  :global(html[data-scrolled]) header {
     max-width: 100%;
     padding: 0 10%;
+    background: var(--bg-color);
     border-bottom: 4px solid var(--primary);
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 0.45rem), 92% 100%, 0 100%);
   }
@@ -65,12 +103,13 @@ import Nav from './Nav.astro'
     color: var(--p5-white);
   }
 
-  :global(.theme-dark) header.scrolled {
+  :global(.theme-dark) html[data-scrolled] header {
     background: var(--p5-black);
+
     box-shadow: 0 0.35rem 0 var(--p5-white);
   }
 
-  @media screen and (max-width: 520px) {
+  @container header (width <= 520px) {
     .header-placeholder {
       height: calc(4em + 75px);
     }
@@ -79,7 +118,7 @@ import Nav from './Nav.astro'
       padding: 2em 0;
     }
 
-    header.scrolled {
+    :global(html[data-scrolled]) header {
       padding: 0;
     }
   }

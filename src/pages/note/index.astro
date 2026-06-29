@@ -3,7 +3,7 @@ import PostGrid from '@/components/PostGrid.astro'
 import { getCollection } from 'astro:content'
 
 const title = 'Note'
-const description = 'Latest articles.'
+const description = '技术笔记集合 - 涵盖 JavaScript、TypeScript、React、CSS、网络、Git 等前端开发相关的学习笔记与实践总结。'
 
 const posts = (await getCollection('note')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),

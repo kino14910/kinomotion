@@ -1,10 +1,4 @@
 <script>
-  import gsap from 'gsap'
-  import { ScrollTrigger } from 'gsap/ScrollTrigger'
-  import { SplitText } from 'gsap/SplitText'
-
-  gsap.registerPlugin(ScrollTrigger, SplitText)
-
   let container = $state(null)
   let copyEl = $state(null)
   let titleEl = $state(null)
@@ -33,8 +27,16 @@
   })
 
   // 亮色模式：SplitText 文字入场 + 鼠标视差 + 滚动驱动视差
-  function initLight() {
+  async function initLight() {
     if (!titleEl || !subEl || !copyEl || !container) return
+
+    // 动态导入 gsap（仅亮色模式需要，暗色模式用 canvas/CSS 变量）
+    const [{ default: gsap }, { ScrollTrigger }, { SplitText }] = await Promise.all([
+      import('gsap'),
+      import('gsap/ScrollTrigger'),
+      import('gsap/SplitText'),
+    ])
+    gsap.registerPlugin(ScrollTrigger, SplitText)
 
     // 入场动画：reduced-motion 时跳过自动播放
     let split
@@ -259,10 +261,25 @@
   $effect(() => {
     if (!container) return
     const dark = isDark
+
+    let cancelled = false
+    let cleanup
+
     if (dark) {
-      return initDark()
+      cleanup = initDark()
     } else {
-      return initLight()
+      initLight().then((fn) => {
+        if (cancelled) {
+          fn?.()
+        } else {
+          cleanup = fn
+        }
+      })
+    }
+
+    return () => {
+      cancelled = true
+      cleanup?.()
     }
   })
 </script>
@@ -299,7 +316,7 @@
   .background {
     min-height: 100dvh;
     background-image: linear-gradient(var(--bgi-gradient)),
-      url('/assets/hero-image.png');
+      url('/assets/hero-image.webp');
     object-fit: fill;
     background-size: cover;
     background-position: center;

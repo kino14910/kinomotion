@@ -63,7 +63,7 @@
   --rays-color-3: rgb(180 100 170);
   --font-family-serif: Merriweather, serif;
   --font-family-sans-code: 'Roboto Mono', sans-serif;
-  --font-family-sans: 'MiSans', 'Roboto Mono', 'Fira Sans', sans-serif;
+  --font-family-sans: 'MiSans', 'Roboto Mono', sans-serif;
 }
 
 :root.theme-dark {
@@ -222,7 +222,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-family-sans);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.2;
   margin: 0 0 0.5em 0;
   letter-spacing: 0.5px;

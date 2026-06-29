@@ -4,7 +4,7 @@
 </script>
 
 <a href={url}>
-  <h6 class="title">{title}</h6>
+  <h2 class="title">{title}</h2>
   {#if showDate}
     <p class="date">
       <FormattedDate date={pubDate} />
@@ -77,7 +77,7 @@
     font-size: 0.875rem;
   }
 
-  a:hover h6,
+  a:hover h2,
   a:hover .date {
     color: var(--primary);
   }
@@ -120,7 +120,6 @@
   :global(.theme-dark) .date {
     margin-top: 0.6rem;
     color: var(--p5-white);
-    font-weight: 800;
   }
 
   :global(.theme-dark) a:hover .title,

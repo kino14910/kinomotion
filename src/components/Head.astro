@@ -30,11 +30,17 @@ const {
 
 const metaDescription = description ?? SITE_DESCRIPTION
 const imageURL = new URL(image.src, Astro.site).toString()
+const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === ''
+const pageTitle = isHomePage
+  ? `${SITE_TITLE} - 前端交互实验室`
+  : `${title} | ${SITE_TITLE}`
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#111111" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="author" content={SITE_TITLE} />
 <link rel="icon" href="/favicon.ico" />
 <link
   rel="alternate"
@@ -44,13 +50,6 @@ const imageURL = new URL(image.src, Astro.site).toString()
 />
 <meta name="generator" content={Astro.generator} />
 
-<link
-  rel="preload"
-  href="/fonts/FiraSans-Regular-subset.woff2"
-  as="font"
-  type="font/woff2"
-  crossorigin
-/>
 <link
   rel="preload"
   href="/fonts/Merriweather_24pt-Regular-subset.woff2"
@@ -89,16 +88,20 @@ const imageURL = new URL(image.src, Astro.site).toString()
 
 <link rel="canonical" href={canonicalURL} />
 
-<title>{title}</title>
-<meta name="title" content={title} />
+<title>{pageTitle}</title>
+<meta name="title" content={pageTitle} />
 <meta name="description" content={metaDescription} />
 
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:locale" content="zh_CN" />
 <meta property="og:url" content={canonicalURL} />
-<meta property="og:title" content={title} />
+<meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={metaDescription} />
 <meta property="og:image" content={imageURL} />
+<meta property="og:image:width" content={String(image.width)} />
+<meta property="og:image:height" content={String(image.height)} />
+<meta property="og:image:alt" content={title} />
 
 {type === 'article' && publishedTime && (
   <meta property="article:published_time" content={publishedTime.toISOString()} />
@@ -115,9 +118,10 @@ const imageURL = new URL(image.src, Astro.site).toString()
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={canonicalURL} />
-<meta name="twitter:title" content={title} />
+<meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={metaDescription} />
 <meta name="twitter:image" content={imageURL} />
+<meta name="twitter:image:alt" content={title} />
 
 <ClientRouter />
 

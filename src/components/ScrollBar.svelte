@@ -1,5 +1,4 @@
 <script>
-  import Lenis from 'lenis'
   import { setLenis } from '@/lib/lenis'
 
   let { minThumbHeight = 40, hoverToShow = false } = $props()
@@ -31,19 +30,30 @@
   let ariaValue = $derived(Math.round(scrollProgress * 100))
 
   $effect(() => {
-    const lenisInstance = new Lenis({
-      autoRaf: true,
-      smoothWheel: true,
-    })
+    let lenisInstance
+    let destroyed = false
 
-    lenisInstance.on('scroll', e => {
-      scrollProgress = e.progress
-      isScrolling = true
-      clearTimeout(scrollingTimeout)
-      scrollingTimeout = setTimeout(() => {
-        isScrolling = false
-      }, 100)
-    })
+    ;(async () => {
+      const { default: Lenis } = await import('lenis')
+      if (destroyed) return
+
+      lenisInstance = new Lenis({
+        autoRaf: true,
+        smoothWheel: true,
+      })
+
+      lenisInstance.on('scroll', e => {
+        scrollProgress = e.progress
+        isScrolling = true
+        clearTimeout(scrollingTimeout)
+        scrollingTimeout = setTimeout(() => {
+          isScrolling = false
+        }, 100)
+      })
+
+      lenis = lenisInstance
+      setLenis(lenisInstance)
+    })()
 
     const updateDimensions = () => {
       containerHeight = window.innerHeight
@@ -53,11 +63,10 @@
 
     updateDimensions()
     resizeObserver.observe(document.documentElement)
-    lenis = lenisInstance
-    setLenis(lenisInstance)
 
     return () => {
-      lenisInstance.destroy()
+      destroyed = true
+      lenisInstance?.destroy()
       resizeObserver.disconnect()
       clearTimeout(scrollingTimeout)
       lenis = null

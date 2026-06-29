@@ -1,35 +1,48 @@
 <script>
-  import gsap from "gsap"
-  import { ScrollTrigger } from "gsap/ScrollTrigger"
-  import { SplitText } from "gsap/SplitText"
-
-  gsap.registerPlugin(ScrollTrigger, SplitText)
-
   let container = $state(null)
 
   $effect(() => {
     if (!container) return
 
-    const specBlock = container.querySelectorAll(".spec-block")
-    const split = new SplitText(specBlock, {
-      type: "chars",
-      charsClass: "split-char",
-    })
+    let cancelled = false
+    let cleanup
 
-    const tween = gsap.from(split.chars, {
-      autoAlpha: 0,
-      duration: 0.01,
-      stagger: 0.025,
-      scrollTrigger: {
-        trigger: specBlock,
-        start: "top 95%",
-      },
-    })
+    ;(async () => {
+      const [{ default: gsap }, { ScrollTrigger }, { SplitText }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+        import("gsap/SplitText"),
+      ])
+      if (cancelled) return
+
+      gsap.registerPlugin(ScrollTrigger, SplitText)
+
+      const specBlock = container.querySelectorAll(".spec-block")
+      const split = new SplitText(specBlock, {
+        type: "chars",
+        charsClass: "split-char",
+      })
+
+      const tween = gsap.from(split.chars, {
+        autoAlpha: 0,
+        duration: 0.01,
+        stagger: 0.025,
+        scrollTrigger: {
+          trigger: specBlock,
+          start: "top 95%",
+        },
+      })
+
+      cleanup = () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+        split.revert()
+      }
+    })()
 
     return () => {
-      tween.scrollTrigger?.kill()
-      tween.kill()
-      split.revert()
+      cancelled = true
+      cleanup?.()
     }
   })
 </script>
@@ -57,7 +70,7 @@
         <div class="reg-mark tr"></div>
         <div class="reg-mark bl"></div>
         <div class="reg-mark br"></div>
-        <img src="/assets/QQAvatar.jpg" alt="Headshot of Kino" />
+        <img src="/assets/QQAvatar.webp" alt="Headshot of Kino" width="210" height="210" />
         <span class="avatar-label">FIG.01 — PORTRAIT</span>
       </div>
 

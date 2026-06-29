@@ -1,25 +1,28 @@
 ---
+import { Image } from 'astro:assets'
+import logo from '../assets/logo.webp'
 ---
 
 <style>
-  img {
+  a {
     display: block;
-    width: 75px;
+    line-height: 0;
   }
 
   @media screen and (max-width: 520px) {
-    img {
+    a {
       display: none;
     }
   }
 </style>
 
 <a href='/'>
-  <img
+  <Image
     alt='Logo'
-    src='/assets/logo.webp'
-    width='75'
-    height='75'
+    src={logo}
+    width={75}
+    height={75}
     loading='eager'
+    densities={[1, 2]}
   />
 </a>

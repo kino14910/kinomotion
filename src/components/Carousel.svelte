@@ -4,7 +4,7 @@
 
   const imageCount = 10
   let imgs = $state(
-    Array.from({ length: imageCount }, (_, i) => `/assets/pokers/poker${i}.jpg`),
+    Array.from({ length: imageCount }, (_, i) => `/assets/pokers/poker${i}.webp`),
   )
   let imgIndex = $state(5)
   let transformDatas = [
@@ -137,6 +137,12 @@
       }
     }
   }
+
+  // 响应式扑克牌 srcset：480w（2x 桌面）、320w（移动端）、640w（回退）
+  function pokerSrcset(src: string) {
+    const base = src.replace(/\.webp$/, '')
+    return `${base}-480w.webp 480w, ${base}-320w.webp 320w, ${src} 640w`
+  }
 </script>
 
 <main
@@ -163,7 +169,13 @@
           onpointerdown={e => handlePointerDown(e, card.id)}
           {@attach cardRef(card.id)}
         >
-          <img src={card.src} alt="Poker Card" loading="lazy" />
+          <img
+            src={card.src}
+            alt="Poker Card"
+            loading="lazy"
+            srcset={pokerSrcset(card.src)}
+            sizes="(max-width: 520px) 160px, 240px"
+          />
         </div>
       {/each}
       <div
@@ -175,9 +187,11 @@
         aria-label="Next Card"
       >
         <img
-          src="/assets/pokers/poker-back.jpg"
+          src="/assets/pokers/poker-back.webp"
           alt="Poker Card Back"
           loading="lazy"
+          srcset="/assets/pokers/poker-back-480w.webp 480w, /assets/pokers/poker-back-320w.webp 320w, /assets/pokers/poker-back.webp 640w"
+          sizes="(max-width: 520px) 160px, 240px"
         />
         <div class="arrow-wrapper">
           <svg
