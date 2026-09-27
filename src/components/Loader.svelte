@@ -177,9 +177,9 @@
   }
 
   .loader-wrapper {
-    --panel-back: var(--p5-paper);
-    --panel-mid: var(--p5-ink);
-    --panel-front: var(--p5-red);
+    --panel-back: var(--dd-cyan);
+    --panel-mid: var(--dd-yellow);
+    --panel-front: var(--dd-pink);
   }
 
   .entering .panel {

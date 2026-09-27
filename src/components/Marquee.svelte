@@ -56,6 +56,20 @@
     --band-stroke: var(--p5-red);
   }
 
+  :global(html:not(.theme-dark)) .marquee-red {
+    --band-bg: var(--dd-yellow);
+    --band-fg: var(--dd-ink);
+    --band-border: var(--dd-pink);
+    --band-stroke: var(--dd-pink);
+  }
+
+  :global(html:not(.theme-dark)) .marquee-ink {
+    --band-bg: var(--dd-pink);
+    --band-fg: var(--p5-white);
+    --band-border: var(--dd-ink);
+    --band-stroke: var(--dd-yellow);
+  }
+
   .marquee-track {
     display: flex;
     width: max-content;

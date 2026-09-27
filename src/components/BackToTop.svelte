@@ -41,9 +41,9 @@
     right: 2em;
     width: 48px;
     height: 48px;
-    background: var(--p5-ink);
-    color: var(--p5-paper);
-    border: 3px solid var(--p5-ink);
+    background: var(--dd-pink);
+    color: var(--p5-white);
+    border: 3px solid var(--dd-ink);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -68,10 +68,10 @@
     }
 
     &:hover {
-      background: var(--p5-red);
-      color: var(--p5-white);
+      background: var(--dd-cyan);
+      color: var(--dd-ink);
       transform: translateY(-3px) skewX(-10deg);
-      box-shadow: 0.45rem 0.45rem 0 var(--p5-ink);
+      box-shadow: 0.45rem 0.45rem 0 var(--dd-ink);
     }
 
     &:active {

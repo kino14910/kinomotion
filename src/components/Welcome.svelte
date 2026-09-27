@@ -207,9 +207,9 @@
   }
 
   .hero-bg {
-    --hero-veil: rgb(245 241 232 / 0.55);
-    --hero-stripe-a: rgb(23 19 15 / 0.16);
-    --hero-stripe-b: rgb(230 0 18 / 0.3);
+    --hero-veil: rgb(255 249 240 / 0.5);
+    --hero-stripe-a: rgb(255 31 109 / 0.6);
+    --hero-stripe-b: rgb(0 207 227 / 0.55);
   }
 
   .hero-halftone {
@@ -227,7 +227,7 @@
   }
 
   .hero-halftone {
-    --hero-dots: var(--p5-ink);
+    --hero-dots: var(--dd-pink);
   }
 
   .hero-inner {
@@ -284,7 +284,7 @@
     width: clamp(1.6rem, 3.4vw, 2.8rem);
     right: 22%;
     top: -14%;
-    fill: var(--p5-white);
+    fill: var(--dd-cyan);
   }
 
   :global(.theme-dark) .hero-star.small {

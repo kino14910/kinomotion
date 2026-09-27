@@ -1,64 +1,79 @@
 /* ============================================================
-   kinoMotion × P5R design system
-   dark = phantom (black/red/white) · light = paper (ink on paper)
+   kinoMotion dual-theme design system
+   dark  = P5R phantom (black / red / white)
+   light = Dohna Dohna pop-cyber (warm paper / pink / cyan / yellow)
    ============================================================ */
 
 :root {
-  --p5-red: #e60012;
-  --p5-red-deep: #a8000e;
+  /* shared constants */
   --p5-black: #0c0c0c;
-  --p5-ink: #17130f;
   --p5-white: #ffffff;
-  --p5-paper: #f5f1e8;
   --p5-gold: #ffc900;
+
+  /* light = Dohna Dohna palette */
+  --dd-pink: #ff1f6d;
+  --dd-pink-deep: #d1004f;
+  --dd-cyan: #00cfe3;
+  --dd-yellow: #ffc900;
+  --dd-ink: #1b1426;
+  --dd-paper: #fff9f0;
+  --dd-pastel-pink: #ffe1ec;
+  --dd-pastel-cyan: #ddf7fb;
+  --dd-pastel-yellow: #fff3c4;
+
+  /* light palette slots */
+  --p5-red: var(--dd-pink);
+  --p5-red-deep: var(--dd-pink-deep);
+  --p5-ink: var(--dd-ink);
+  --p5-paper: var(--dd-paper);
 
   --primary: var(--p5-red);
   --on-primary: var(--p5-white);
   --primary-container: var(--p5-ink);
   --on-primary-container: var(--p5-paper);
   --primary-hover: var(--p5-red-deep);
-  --primary-gray: #7d7666;
+  --primary-gray: #8a7f95;
   --primary-light: var(--p5-white);
   --primary-dark: var(--p5-ink);
 
   --secondary: var(--p5-ink);
   --on-secondary: var(--p5-paper);
-  --secondary-container: #e8e2d2;
+  --secondary-container: var(--dd-pastel-pink);
   --on-secondary-container: var(--p5-ink);
   --on-secondary-fixed-variant: var(--p5-ink);
   --on-primary-fixed: var(--p5-ink);
-  --tertiary: var(--p5-gold);
+  --tertiary: var(--dd-cyan);
   --on-tertiary: var(--p5-ink);
 
   --error: var(--p5-red);
   --on-error: var(--p5-white);
-  --error-container: #ffd9d9;
-  --on-error-container: #5f0007;
+  --error-container: var(--dd-pastel-pink);
+  --on-error-container: var(--dd-pink-deep);
 
   --background: var(--p5-paper);
   --on-background: var(--p5-ink);
   --surface: var(--p5-paper);
   --on-surface: var(--p5-ink);
-  --surface-variant: #e9e3d3;
-  --on-surface-variant: #4c4738;
-  --outline: #b7b09c;
-  --outline-variant: #d8d2bf;
+  --surface-variant: var(--dd-pastel-pink);
+  --on-surface-variant: #6b5b74;
+  --outline: #c9b8c6;
+  --outline-variant: #ead9e4;
   --shadow: #000000;
   --scrim: #000000;
   --inverse-surface: var(--p5-ink);
   --inverse-on-surface: var(--p5-paper);
   --inverse-primary: var(--p5-red);
-  --surface-dim: #e3ddcc;
+  --surface-dim: #f5e9dc;
   --surface-bright: #ffffff;
   --surface-container-lowest: #ffffff;
-  --surface-container-low: #fbf8f0;
-  --surface-container: #f2ede0;
-  --surface-container-high: #ece6d5;
-  --surface-container-highest: #e5dfcc;
+  --surface-container-low: #fffdf8;
+  --surface-container: #fdf3e6;
+  --surface-container-high: #f9ecdc;
+  --surface-container-highest: #f4e5d2;
 
   --bg-color: var(--p5-paper);
   --text-main: var(--p5-ink);
-  --text-secondary: #57523f;
+  --text-secondary: #655a72;
 
   --hard-shadow: 0.32em 0.32em 0 var(--p5-ink);
   --hard-shadow-red: 0.32em 0.32em 0 var(--p5-red);
@@ -78,6 +93,12 @@
 
 :root.theme-dark {
   color-scheme: dark;
+
+  /* dark = P5R palette slots */
+  --p5-red: #e60012;
+  --p5-red-deep: #a8000e;
+  --p5-ink: #17130f;
+  --p5-paper: #f5f1e8;
 
   --primary: var(--p5-red);
   --on-primary: var(--p5-white);
@@ -384,9 +405,9 @@ hr {
   margin: 40px auto;
   background: repeating-linear-gradient(
     -45deg,
-    var(--p5-red) 0 10px,
-    var(--p5-ink) 10px 20px,
-    transparent 20px 30px
+    var(--dd-pink) 0 10px,
+    var(--dd-cyan) 10px 20px,
+    var(--dd-yellow) 20px 30px
   );
   clip-path: polygon(1% 0, 100% 0, 99% 100%, 0 100%);
 }
@@ -408,8 +429,10 @@ code {
   padding: 0.2em 0.4em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--p5-ink);
-  color: var(--p5-paper);
+  background: var(--dd-yellow);
+  color: var(--dd-ink);
+  border: 2px solid var(--dd-ink);
+  box-shadow: 0.14em 0.14em 0 var(--dd-pink);
 }
 
 :root.theme-dark code {
@@ -449,15 +472,17 @@ blockquote {
   font-style: italic;
   margin: 2rem 0;
   padding: 1.25rem 2rem;
-  background: var(--p5-ink);
-  color: var(--p5-paper);
-  box-shadow: -0.4em 0.4em 0 var(--p5-red);
+  background: var(--p5-white);
+  color: var(--dd-ink);
+  border: 3px solid var(--dd-ink);
+  box-shadow: -0.4em 0.4em 0 var(--dd-pink);
   clip-path: polygon(1.4em 0, 100% 0, calc(100% - 1.4em) 100%, 0 100%);
 }
 
 :root.theme-dark blockquote {
   background: var(--p5-white);
   color: var(--p5-black);
+  border: 0;
 }
 
 blockquote p {
@@ -490,9 +515,9 @@ table {
 }
 
 th {
-  background: var(--p5-ink);
-  color: var(--p5-paper);
-  border-bottom: 2px solid var(--p5-red);
+  background: var(--dd-pink);
+  color: var(--p5-white);
+  border-bottom: 2px solid var(--dd-ink);
   padding: 0.4em 0.8em;
   word-break: break-word;
 }

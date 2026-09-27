@@ -116,8 +116,8 @@
     font-family: var(--font-family-sans-code);
     font-size: 0.78rem;
     font-weight: 700;
-    color: var(--p5-white);
-    background: var(--p5-ink);
+    color: var(--dd-ink);
+    background: var(--dd-cyan);
     transform: skewX(-8deg);
     transition:
       color 0.18s ease,
@@ -130,7 +130,7 @@
 
   a:hover .date {
     background: var(--p5-white);
-    color: var(--p5-ink);
+    color: var(--dd-ink);
   }
 
   :global(.theme-dark) a {

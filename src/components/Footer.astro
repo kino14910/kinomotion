@@ -47,15 +47,15 @@ const today = new Date()
   }
 
   footer {
-    --footer-bg: var(--p5-ink);
-    --footer-fg: var(--p5-paper);
-    --footer-edge: var(--p5-red);
+    --footer-bg: var(--dd-pink);
+    --footer-fg: var(--p5-white);
+    --footer-edge: var(--dd-yellow);
   }
 
   .footer-edge {
     height: 18px;
     background:
-      conic-gradient(from 135deg at 50% 100%, var(--footer-edge) 90deg, transparent 0)
+      conic-gradient(from 135deg at 50% 0%, var(--footer-edge) 90deg, transparent 0)
       0 0 / 36px 100% repeat-x;
   }
 
@@ -63,12 +63,22 @@ const today = new Date()
     height: 10px;
     background: repeating-linear-gradient(
       -45deg,
-      var(--p5-red) 0 14px,
-      var(--footer-bg) 14px 28px,
-      var(--footer-fg) 28px 34px,
-      var(--footer-bg) 34px 52px
+      var(--p5-white) 0 14px,
+      transparent 14px 28px,
+      var(--dd-cyan) 28px 42px,
+      transparent 42px 56px
     );
     opacity: 0.9;
+  }
+
+  :global(.theme-dark) .footer-band {
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--p5-red) 0 14px,
+      var(--p5-black) 14px 28px,
+      var(--p5-white) 28px 34px,
+      var(--p5-black) 34px 52px
+    );
   }
 
   .footer-content {
@@ -156,5 +166,18 @@ const today = new Date()
     color: var(--p5-white);
     box-shadow: 0.32rem 0.32rem 0 var(--footer-fg);
     transform: translate(-0.06rem, -0.06rem) skewX(-8deg);
+  }
+
+  :global(html:not(.theme-dark)) .footer-links a {
+    box-shadow: 0.22rem 0.22rem 0 var(--dd-yellow);
+  }
+
+  :global(html:not(.theme-dark)) .footer-links a:hover {
+    background: var(--dd-ink);
+    color: var(--dd-yellow);
+  }
+
+  :global(html:not(.theme-dark)) .heart {
+    color: var(--dd-yellow);
   }
 </style>

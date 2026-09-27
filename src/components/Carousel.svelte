@@ -240,6 +240,8 @@
     justify-content: start;
     width: 45rem;
     height: 100%;
+    padding-top: clamp(3rem, 9vh, 5.5rem);
+    box-sizing: border-box;
   }
 
   .title {
@@ -285,7 +287,7 @@
     transform-origin: bottom left;
     overflow: hidden;
     transform: var(--poker-transform);
-    box-shadow: 0.5rem 0.5rem 0 rgb(0 0 0 / 0.35);
+    box-shadow: 0.5rem 0.5rem 0 var(--dd-pink);
   }
 
   :global(.theme-dark) .poker,
@@ -335,11 +337,11 @@
     position: absolute;
     width: 3rem;
     height: 3rem;
-    background-color: var(--p5-white);
-    color: var(--p5-ink);
-    border: 0.18rem solid var(--p5-ink);
+    background-color: var(--dd-yellow);
+    color: var(--dd-ink);
+    border: 0.18rem solid var(--dd-ink);
     animation: arrow-move 1.5s infinite ease-in-out;
-    filter: drop-shadow(0.2rem 0.2rem 0 rgb(0 0 0 / 0.4));
+    filter: drop-shadow(0.2rem 0.2rem 0 var(--dd-pink));
   }
 
   :global(.theme-dark) .arrow-wrapper {

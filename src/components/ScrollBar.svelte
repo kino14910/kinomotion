@@ -173,7 +173,7 @@
   .track-container {
     --scrollbar-width: 16px;
     --thumb-visible-width: 8px;
-    --thumb-bg: rgb(23 19 15 / 0.35);
+    --thumb-bg: rgb(27 20 38 / 0.35);
     --thumb-bg-active: var(--p5-red);
 
     position: fixed;

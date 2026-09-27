@@ -35,9 +35,9 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '')
 
     &:hover {
       opacity: 1;
-      background: var(--p5-red);
-      color: var(--p5-white);
-      box-shadow: 0.28rem 0.28rem 0 var(--p5-ink);
+      background: var(--dd-cyan);
+      color: var(--dd-ink);
+      box-shadow: 0.28rem 0.28rem 0 var(--dd-pink);
       transform: translate(-0.08rem, -0.08rem) skewX(-8deg);
     }
 
@@ -48,7 +48,7 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '')
       right: 12px;
       bottom: 4px;
       height: 4px;
-      background: var(--p5-red);
+      background: var(--dd-pink);
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
@@ -56,14 +56,14 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '')
 
     &.selected {
       opacity: 1;
-      background: var(--p5-ink);
-      color: var(--p5-paper);
-      box-shadow: 0.28rem 0.28rem 0 var(--p5-red);
+      background: var(--dd-pink);
+      color: var(--p5-white);
+      box-shadow: 0.28rem 0.28rem 0 var(--dd-ink);
     }
 
     &.selected::before {
       transform: scaleX(1);
-      background: var(--p5-paper);
+      background: var(--p5-white);
     }
   }
 

@@ -228,12 +228,12 @@
 
 <style>
   .home-wavy-lines {
-    --wavy-stroke: var(--p5-ink);
+    --wavy-stroke: var(--dd-pink);
     position: relative;
     max-width: 100dvw;
     height: 60dvh;
-    background-color: var(--p5-paper);
-    border-block: 6px solid var(--p5-red);
+    background-color: var(--dd-pastel-cyan);
+    border-block: 6px solid var(--dd-pink);
     overflow: hidden;
     touch-action: none;
   }
@@ -244,8 +244,8 @@
     left: 0;
     width: 0.7rem;
     height: 0.7rem;
-    background: var(--p5-red);
-    border: 2px solid var(--p5-ink);
+    background: var(--dd-yellow);
+    border: 2px solid var(--dd-ink);
     transform: translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0) rotate(45deg);
     will-change: transform;
     pointer-events: none;
@@ -262,7 +262,7 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: transparent;
-    -webkit-text-stroke: 0.03em var(--p5-red);
+    -webkit-text-stroke: 0.03em var(--dd-pink);
     transform: rotate(-2deg) skewX(-8deg);
     opacity: 0.85;
     pointer-events: none;

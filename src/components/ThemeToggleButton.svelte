@@ -88,10 +88,10 @@
     height: 42px;
     padding: 0;
     cursor: pointer;
-    background: var(--p5-ink);
-    color: var(--p5-paper);
-    border: 2px solid var(--p5-ink);
-    box-shadow: 0.2rem 0.2rem 0 var(--p5-red);
+    background: var(--dd-yellow);
+    color: var(--dd-ink);
+    border: 2px solid var(--dd-ink);
+    box-shadow: 0.2rem 0.2rem 0 var(--dd-pink);
     transform: skewX(-10deg);
     transition:
       transform 0.18s ease,
@@ -101,9 +101,9 @@
   }
 
   .theme-button:hover {
-    background: var(--p5-red);
+    background: var(--dd-pink);
     color: var(--p5-white);
-    box-shadow: 0.3rem 0.3rem 0 var(--p5-ink);
+    box-shadow: 0.3rem 0.3rem 0 var(--dd-ink);
     transform: translate(-0.06rem, -0.06rem) skewX(-10deg);
   }
 

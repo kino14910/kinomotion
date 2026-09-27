@@ -184,7 +184,7 @@
   }
 
   .about-ghost {
-    --ghost-stroke: rgb(230 0 18 / 0.3);
+    --ghost-stroke: rgb(255 31 109 / 0.32);
   }
 
   .about-inner {
@@ -260,7 +260,7 @@
     padding: 0.4rem 0.85rem;
     border: 2px solid var(--p5-ink);
     color: var(--p5-ink);
-    background: var(--p5-paper);
+    background: var(--p5-white);
     transform: skewX(-10deg);
     box-shadow: 0.25rem 0.25rem 0 var(--p5-red);
   }
