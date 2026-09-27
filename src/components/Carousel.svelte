@@ -217,8 +217,20 @@
     align-items: center;
     width: 100dvw;
     height: 100dvh;
-    /* overflow: hidden; */
     isolation: isolate;
+    position: relative;
+    z-index: 2;
+    overflow-x: clip;
+  }
+
+  :global(.theme-dark) .home-photos {
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 45%, rgb(230 0 18 / 0.16), transparent 70%),
+      repeating-linear-gradient(
+        -45deg,
+        transparent 0 52px,
+        rgb(255 255 255 / 0.03) 52px 54px
+      );
   }
 
   .home-photos-container {
@@ -232,28 +244,32 @@
 
   .title {
     display: block;
-    font-size: clamp(6rem, 13vw, 12rem);
-    font-family: 'Impact Regular';
+    font-size: clamp(5rem, 12vw, 11rem);
+    font-family: var(--font-family-display);
     font-weight: 400;
+    letter-spacing: 0.06em;
+    line-height: 0.82;
+    text-transform: uppercase;
+    transform: rotate(-2deg) skewX(-8deg);
     color: transparent;
-    letter-spacing: 0.15rem;
-    -webkit-text-stroke: 0.15rem var(--on-secondary-fixed-variant);
-    transform: scaleY(70%);
+    -webkit-text-stroke: 0.035em var(--p5-ink);
+    text-shadow: 0.06em 0.06em 0 var(--p5-red);
+    user-select: none;
   }
 
   :global(.theme-dark) .title {
     color: var(--p5-white);
-    -webkit-text-stroke: 0.12rem var(--p5-black);
+    -webkit-text-stroke: 0.025em var(--p5-black);
     text-shadow:
-      0.06em 0.06em 0 var(--primary),
+      0.05em 0.05em 0 var(--p5-red),
       0.1em 0.1em 0 var(--p5-white);
-    transform: scaleY(70%) skewX(-8deg) rotate(-2deg);
   }
 
   .home-photos-plates {
     position: relative;
     width: 45rem;
     height: 25rem;
+    margin-top: clamp(4rem, 9vh, 6.5rem);
     margin-bottom: 1rem;
   }
 
@@ -263,12 +279,19 @@
     position: absolute;
     width: 20rem;
     height: 26rem;
-    border: 0.2rem solid var(--on-background);
-    border-radius: 1.5rem;
-    background-color: var(--primary-dark);
+    border: 0.2rem solid var(--p5-ink);
+    border-radius: 1rem;
+    background-color: var(--p5-white);
     transform-origin: bottom left;
     overflow: hidden;
     transform: var(--poker-transform);
+    box-shadow: 0.5rem 0.5rem 0 rgb(0 0 0 / 0.35);
+  }
+
+  :global(.theme-dark) .poker,
+  :global(.theme-dark) .poker-top {
+    border-color: var(--p5-white);
+    box-shadow: 0.55rem 0.55rem 0 var(--p5-red);
   }
 
   .poker:hover {
@@ -290,8 +313,8 @@
   }
 
   .poker-top {
-    background-color: var(--primary);
-    border: none;
+    background-color: var(--p5-red);
+    border-color: var(--p5-ink);
     cursor: pointer;
     z-index: 9;
     display: flex;
@@ -312,19 +335,18 @@
     position: absolute;
     width: 3rem;
     height: 3rem;
-    background-color: var(--on-primary-fixed);
-    color: var(--on-primary);
-    border-radius: 50%;
+    background-color: var(--p5-white);
+    color: var(--p5-ink);
+    border: 0.18rem solid var(--p5-ink);
     animation: arrow-move 1.5s infinite ease-in-out;
-    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0.2rem 0.2rem 0 rgb(0 0 0 / 0.4));
   }
 
   :global(.theme-dark) .arrow-wrapper {
     background-color: var(--p5-white);
     color: var(--p5-black);
-    border: 0.18rem solid var(--primary);
-    border-radius: 0;
-    filter: drop-shadow(0.22rem 0.22rem 0 var(--primary));
+    border-color: var(--p5-red);
+    filter: drop-shadow(0.22rem 0.22rem 0 var(--p5-red));
   }
 
   @keyframes arrow-move {

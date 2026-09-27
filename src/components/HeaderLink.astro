@@ -10,93 +10,90 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '')
   a {
     color: inherit;
     text-decoration: none;
-    padding: 8px 16px;
+    padding: 8px 18px;
     display: block;
     position: relative;
     margin-left: 12px;
     min-width: 60px;
     text-align: center;
     user-select: none;
-    font-weight: 600;
-    border: 2px solid transparent;
-    border-radius: 6px;
-    transition: 0.2s ease;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border: 2px solid var(--p5-ink);
+    transform: skewX(-8deg);
+    background: transparent;
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      background-color 0.18s ease,
+      color 0.18s ease;
     box-sizing: border-box;
 
     &:not(.selected) {
-      opacity: 0.7;
+      opacity: 0.75;
     }
 
     &:hover {
       opacity: 1;
+      background: var(--p5-red);
+      color: var(--p5-white);
+      box-shadow: 0.28rem 0.28rem 0 var(--p5-ink);
+      transform: translate(-0.08rem, -0.08rem) skewX(-8deg);
     }
 
     &::before {
       content: '';
       position: absolute;
-      transition: transform 0.3s ease;
-      left: 8px;
-      right: 8px;
-      bottom: 2px;
-      height: 2px;
-      background: var(--primary);
+      left: 12px;
+      right: 12px;
+      bottom: 4px;
+      height: 4px;
+      background: var(--p5-red);
       transform: scaleX(0);
-      border-radius: 1px;
+      transform-origin: left;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     &.selected {
       opacity: 1;
+      background: var(--p5-ink);
+      color: var(--p5-paper);
+      box-shadow: 0.28rem 0.28rem 0 var(--p5-red);
     }
 
-    &:hover::before,
     &.selected::before {
       transform: scaleX(1);
+      background: var(--p5-paper);
     }
   }
 
   :global(.theme-dark) a {
     color: var(--p5-white);
-    letter-spacing: 0.04em;
-    opacity: 1;
-    transform: skewX(-8deg);
-    border: 2px solid var(--p5-white);
-    border-radius: 0;
-    padding: 8px 18px;
-    background: transparent;
-    box-shadow: 0.2rem 0.2rem 0 var(--primary);
+    border-color: var(--p5-white);
+    box-shadow: 0.2rem 0.2rem 0 var(--p5-red);
   }
 
   :global(.theme-dark) a:not(.selected) {
-    opacity: 0.82;
-  }
-
-  :global(.theme-dark) a::before {
-    height: 4px;
-    background: var(--primary);
-    box-shadow: 0 -0.25rem 0 var(--p5-white);
-    transform-origin: left;
-    left: 18px;
-    right: 18px;
+    opacity: 0.85;
   }
 
   :global(.theme-dark) a:hover {
-    background: var(--primary);
-    box-shadow: 0.35rem 0.35rem 0 var(--p5-white);
-    transform: translate(-0.08rem, -0.08rem) skewX(-8deg);
-  }
-
-  :global(.theme-dark) a.selected {
-    background: var(--primary);
-    box-shadow: 0.35rem 0.35rem 0 var(--p5-white);
-  }
-
-  :global(.theme-dark) a:hover,
-  :global(.theme-dark) a.selected {
+    background: var(--p5-red);
     color: var(--p5-white);
+    box-shadow: 0.32rem 0.32rem 0 var(--p5-white);
   }
 
-  :global(.theme-dark) a:hover::before,
+  :global(.theme-dark) a:hover::before {
+    background: var(--p5-white);
+  }
+
+  :global(.theme-dark) a.selected {
+    background: var(--p5-red);
+    color: var(--p5-white);
+    box-shadow: 0.32rem 0.32rem 0 var(--p5-white);
+  }
+
   :global(.theme-dark) a.selected::before {
-    transform: scaleX(1);
+    background: var(--p5-white);
   }
 </style>

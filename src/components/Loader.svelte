@@ -100,6 +100,10 @@
   class:exiting={phase === 'exiting'}
   class:done={phase === 'done'}
 >
+  <div class="panel panel-back"></div>
+  <div class="panel panel-mid"></div>
+  <div class="panel panel-front"></div>
+
   <div class="loader-inner">
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -129,85 +133,145 @@
   .loader-wrapper {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: var(--bg-color);
     z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    transform: translateX(0);
-    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .loader-wrapper.entering {
-    transform: translateX(-100%);
-    transition: none;
-  }
-
-  .loader-wrapper.covering {
-    transform: translateX(0);
-  }
-
-  .loader-wrapper.exiting {
-    transform: translateX(100%);
-    transition: transform 800ms cubic-bezier(0.7, 0, 0.84, 0);
+    pointer-events: none;
   }
 
   .loader-wrapper.done {
     visibility: hidden;
-    pointer-events: none;
   }
 
-  .loader-inner {
-    color: var(--primary);
+  .panel {
+    position: absolute;
+    inset: 0;
+    width: 104vw;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 4vw) 100%, 0 100%);
+    transform: translateX(0);
+    transition:
+      transform 560ms cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0ms;
+    will-change: transform;
+  }
+
+  .panel-back {
+    background: var(--panel-back);
+  }
+
+  .panel-mid {
+    background: var(--panel-mid);
+  }
+
+  .panel-front {
+    background: var(--panel-front);
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent 0 34px,
+      rgb(255 255 255 / 0.14) 34px 40px
+    );
   }
 
   :global(.theme-dark) .loader-wrapper {
-    background:
-      repeating-linear-gradient(
-        -24deg,
-        var(--p5-black) 0 40px,
-        var(--primary) 40px 62px,
-        var(--p5-black) 62px 94px,
-        var(--p5-white) 94px 100px
-      );
+    --panel-back: var(--p5-white);
+    --panel-mid: var(--p5-black);
+    --panel-front: var(--p5-red);
   }
 
-  :global(.theme-dark) .loader-wrapper.entering {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  
-  :global(.theme-dark) .loader-wrapper.exiting {
-    transform: translateX(0);
-    opacity: 0;
-    transition: transform 800ms cubic-bezier(0.7, 0, 0.84, 0);
-    transition: opacity 400ms cubic-bezier(0.7, 0, 0.84, 0);
+  .loader-wrapper {
+    --panel-back: var(--p5-paper);
+    --panel-mid: var(--p5-ink);
+    --panel-front: var(--p5-red);
   }
 
-  :global(.theme-dark) .loader-inner {
+  .entering .panel {
+    transform: translateX(-104%);
+    transition: none;
+  }
+
+  .covering .panel {
+    transform: translateX(0);
+  }
+
+  .covering .panel-back {
+    transition-delay: 0ms;
+  }
+  .covering .panel-mid {
+    transition-delay: 70ms;
+  }
+  .covering .panel-front {
+    transition-delay: 140ms;
+  }
+
+  .exiting .panel {
+    transform: translateX(104%);
+    transition-timing-function: cubic-bezier(0.7, 0, 0.84, 1);
+  }
+
+  .exiting .panel-front {
+    transition-delay: 0ms;
+  }
+  .exiting .panel-mid {
+    transition-delay: 80ms;
+  }
+  .exiting .panel-back {
+    transition-delay: 160ms;
+  }
+
+  .loader-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     display: grid;
     place-items: center;
     width: 8rem;
     height: 8rem;
-    background: var(--p5-black);
-    border: 4px solid var(--p5-white);
-    color: var(--p5-white);
-    box-shadow: 0.6rem 0.6rem 0 var(--primary);
-    transform: rotate(-5deg);
+    background: var(--box-bg);
+    border: 4px solid var(--box-border);
+    color: var(--box-fg);
+    box-shadow: 0.6rem 0.6rem 0 var(--p5-red);
+    transform: translate(-50%, -50%) rotate(-5deg);
+    transition:
+      transform 420ms cubic-bezier(0.7, 0, 0.84, 1),
+      opacity 320ms ease;
+  }
+
+  :global(.theme-dark) .loader-inner {
+    --box-bg: var(--p5-black);
+    --box-border: var(--p5-white);
+    --box-fg: var(--p5-white);
+  }
+
+  .loader-inner {
+    --box-bg: var(--p5-paper);
+    --box-border: var(--p5-ink);
+    --box-fg: var(--p5-ink);
+  }
+
+  .entering .loader-inner {
+    transform: translate(-50%, -50%) rotate(-5deg) scale(0.6);
+    opacity: 0;
+    transition: none;
+  }
+
+  .covering .loader-inner {
+    transform: translate(-50%, -50%) rotate(-5deg) scale(1);
+    opacity: 1;
+  }
+
+  .exiting .loader-inner {
+    transform: translate(-50%, -50%) rotate(6deg) scale(0.5);
+    opacity: 0;
+  }
+
+  .done .loader-inner {
+    opacity: 0;
   }
 
   .logo-svg {
     width: 62px;
     height: auto;
     overflow: visible;
-  }
-
-  :global(.theme-dark) .logo-svg {
-    filter: drop-shadow(0.18rem 0.18rem 0 var(--primary));
     transform: rotate(5deg);
+    filter: drop-shadow(0.18rem 0.18rem 0 var(--p5-red));
   }
 
   .logo-svg path {

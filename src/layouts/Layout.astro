@@ -2,6 +2,7 @@
 import Footer from '@/components/Footer.astro'
 import Head from '@/components/Head.astro'
 import Header from '@/components/Header.astro'
+import Cursor from '@/components/Cursor.svelte'
 import Loader from '@/components/Loader.svelte'
 import ScrollBar from '@/components/ScrollBar.svelte'
 import { SITE_DESCRIPTION, SITE_TITLE } from '@/consts'
@@ -64,6 +65,7 @@ const websiteSchema = {
         <Loader client:load />
       </div>
       <ScrollBar client:only />
+      <Cursor client:only='svelte' />
       <Header />
       <slot />
       <Footer />

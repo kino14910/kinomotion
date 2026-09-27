@@ -95,7 +95,7 @@ import Nav from './Nav.astro'
     max-width: 100%;
     padding: 0 10%;
     background: var(--bg-color);
-    border-bottom: 4px solid var(--primary);
+    border-bottom: 4px solid var(--p5-red);
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 0.45rem), 92% 100%, 0 100%);
   }
 
@@ -103,9 +103,14 @@ import Nav from './Nav.astro'
     color: var(--p5-white);
   }
 
-  :global(.theme-dark) html[data-scrolled] header {
-    background: var(--p5-black);
-
+  :global(html.theme-dark[data-scrolled]) header {
+    background:
+      repeating-linear-gradient(
+        -45deg,
+        transparent 0 18px,
+        rgb(230 0 18 / 0.08) 18px 20px
+      ),
+      var(--p5-black);
     box-shadow: 0 0.35rem 0 var(--p5-white);
   }
 

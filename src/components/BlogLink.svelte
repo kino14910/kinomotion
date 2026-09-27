@@ -1,9 +1,12 @@
 <script>
   import FormattedDate from './FormattedDate.svelte'
-  const { url, title, showDate, pubDate } = $props()
+  const { url, title, showDate, pubDate, index = 0 } = $props()
+
+  const num = $derived(String(index + 1).padStart(2, '0'))
 </script>
 
 <a href={url}>
+  <span class="ghost-num" aria-hidden="true">{num}</span>
   <h2 class="title">{title}</h2>
   {#if showDate}
     <p class="date">
@@ -13,32 +16,66 @@
 </a>
 
 <style>
-  * {
-    text-decoration: none;
-    transition: 0.2s ease;
-  }
-
   a {
+    position: relative;
     display: block;
-    padding: 1rem 1.5rem;
-    border: 2px solid transparent;
-    border-radius: 8px;
     min-height: 100%;
+    padding: 1.4rem 1.6rem 1.2rem;
     box-sizing: border-box;
+    text-decoration: none;
+    background: var(--p5-white);
+    border: 3px solid var(--p5-ink);
+    clip-path: var(--cut-notch);
+    box-shadow: 0.35rem 0.35rem 0 var(--p5-red);
+    transform: skewX(-4deg) rotate(var(--tilt, 0deg));
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      background-color 0.18s ease;
+    overflow: hidden;
   }
 
   a:hover {
-    border-color: var(--primary);
-    box-shadow: 0 4px 16px rgba(0 0 0 / 0.06);
-    transform: translateY(-2px);
+    background: var(--p5-red);
+    border-color: var(--p5-ink);
+    box-shadow: 0.5rem 0.5rem 0 var(--p5-ink);
+    transform: translate(-0.12rem, -0.12rem) skewX(-4deg) rotate(0deg);
+  }
+
+  .ghost-num {
+    position: absolute;
+    top: -0.18em;
+    right: 0.08em;
+    font-family: var(--font-family-display);
+    font-size: 4.6rem;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 2.5px var(--p5-red);
+    opacity: 0.7;
+    transform: skewX(4deg);
+    transition:
+      -webkit-text-stroke-color 0.18s ease,
+      opacity 0.18s ease;
+    pointer-events: none;
+  }
+
+  a:hover .ghost-num {
+    -webkit-text-stroke-color: var(--p5-white);
+    opacity: 0.9;
   }
 
   .title {
-    margin: 0;
-    color: var(--text-main);
-    line-height: 1.3;
     position: relative;
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: clamp(1.3rem, 1.7vw, 1.7rem);
+    font-weight: 800;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--p5-ink);
     display: inline-block;
+    transition: color 0.18s ease;
   }
 
   @keyframes blink-in {
@@ -56,74 +93,73 @@
     }
   }
 
-  .title:before {
-    position: absolute;
-    top: calc(50% - 4px);
-    left: -13px;
-    border-top: 4px solid transparent;
-    border-left: 8px solid currentcolor;
-    border-bottom: 4px solid transparent;
-    opacity: 0;
+  .title::before {
     content: '';
+    position: absolute;
+    top: calc(50% - 6px);
+    left: -20px;
+    border-top: 6px solid transparent;
+    border-left: 11px solid currentcolor;
+    border-bottom: 6px solid transparent;
+    opacity: 0;
   }
 
-  a:hover .title:before {
+  a:hover .title::before {
     animation: blink-in 0.3s cubic-bezier(1, 0, 0, 1) forwards;
   }
 
   .date {
-    margin: 0.35rem 0 0;
-    color: var(--primary-gray);
-    font-size: 0.875rem;
+    position: relative;
+    display: inline-block;
+    margin: 0.7rem 0 0;
+    padding: 0.15em 0.55em;
+    font-family: var(--font-family-sans-code);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--p5-white);
+    background: var(--p5-ink);
+    transform: skewX(-8deg);
+    transition:
+      color 0.18s ease,
+      background-color 0.18s ease;
   }
 
-  a:hover h2,
+  a:hover .title {
+    color: var(--p5-white);
+  }
+
   a:hover .date {
-    color: var(--primary);
+    background: var(--p5-white);
+    color: var(--p5-ink);
   }
 
-  /* Dark theme */
   :global(.theme-dark) a {
-    padding: 1rem 2rem;
     background: var(--p5-black);
-    border: 3px solid var(--p5-white);
-    border-radius: 0;
-    box-shadow: 0.35rem 0.35rem 0 var(--primary);
-    transform: skewX(-5deg);
+    border-color: var(--p5-white);
+    box-shadow: 0.35rem 0.35rem 0 var(--p5-red);
   }
 
   :global(.theme-dark) a:hover {
-    background: var(--primary);
-    color: var(--p5-white);
+    background: var(--p5-red);
     border-color: var(--p5-white);
     box-shadow: 0.5rem 0.5rem 0 var(--p5-white);
-    transform: translate(-0.12rem, -0.12rem) rotate(-1deg) skewX(-5deg);
   }
 
   :global(.theme-dark) .title {
     color: var(--p5-white);
-    font-family: 'Impact Regular';
-    font-size: clamp(1.25rem, 1.8vw, 1.85rem);
-    font-weight: 400;
-    line-height: 0.95;
-    text-transform: uppercase;
   }
 
-  :global(.theme-dark) .title:before {
-    left: -18px;
-    border-top-width: 7px;
-    border-left-width: 13px;
-    border-bottom-width: 7px;
+  :global(.theme-dark) a:hover .title {
     color: var(--p5-white);
   }
 
   :global(.theme-dark) .date {
-    margin-top: 0.6rem;
-    color: var(--p5-white);
+    background: var(--p5-white);
+    color: var(--p5-black);
   }
 
-  :global(.theme-dark) a:hover .title,
   :global(.theme-dark) a:hover .date {
+    background: var(--p5-black);
     color: var(--p5-white);
   }
 </style>

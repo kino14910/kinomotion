@@ -221,16 +221,19 @@
     style:--y="{pointerY}px"
   ></div>
 
+  <span class="wavy-word" aria-hidden="true">SIGNAL</span>
+
   <canvas bind:this={canvasEl}></canvas>
 </div>
 
 <style>
   .home-wavy-lines {
-    --wavy-stroke: var(--text-main);
+    --wavy-stroke: var(--p5-ink);
     position: relative;
     max-width: 100dvw;
     height: 60dvh;
-    background-color: var(--bg-color);
+    background-color: var(--p5-paper);
+    border-block: 6px solid var(--p5-red);
     overflow: hidden;
     touch-action: none;
   }
@@ -239,28 +242,48 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 0.5rem;
-    height: 0.5rem;
-    background: var(--text-secondary);
-    border-radius: 50%;
-    transform: translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0);
+    width: 0.7rem;
+    height: 0.7rem;
+    background: var(--p5-red);
+    border: 2px solid var(--p5-ink);
+    transform: translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0) rotate(45deg);
     will-change: transform;
     pointer-events: none;
     z-index: 2;
   }
 
+  .wavy-word {
+    position: absolute;
+    right: 4%;
+    bottom: 8%;
+    font-family: var(--font-family-display);
+    font-size: clamp(4rem, 11vw, 9rem);
+    line-height: 0.85;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: transparent;
+    -webkit-text-stroke: 0.03em var(--p5-red);
+    transform: rotate(-2deg) skewX(-8deg);
+    opacity: 0.85;
+    pointer-events: none;
+    z-index: 1;
+  }
+
   :global(.theme-dark) .home-wavy-lines {
     --wavy-stroke: var(--p5-black);
     background: var(--p5-red);
+    border-block-color: var(--p5-white);
   }
 
   :global(.theme-dark) .pointer-dot {
-    width: 0.8rem;
-    height: 0.8rem;
-    background: var(--primary);
-    border: 2px solid var(--p5-white);
-    border-radius: 0;
-    box-shadow: 0.18rem 0.18rem 0 var(--p5-white);
+    background: var(--p5-white);
+    border-color: var(--p5-black);
+    box-shadow: 0.18rem 0.18rem 0 var(--p5-black);
+  }
+
+  :global(.theme-dark) .wavy-word {
+    -webkit-text-stroke-color: var(--p5-white);
+    text-shadow: 0.06em 0.06em 0 var(--p5-black);
   }
 
   canvas {

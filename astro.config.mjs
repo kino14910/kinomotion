@@ -12,6 +12,12 @@ import rehypeSlug from 'rehype-slug';
 export default defineConfig({
   site: 'https://kinomotion.pages.dev',
   integrations: [mdx(), sitemap(), svelte()],
+  vite: {
+    optimizeDeps: {
+      noDiscovery: true,
+      include: ['gsap', 'gsap/ScrollTrigger', 'gsap/SplitText', 'lenis'],
+    },
+  },
   markdown: {
     shikiConfig: {
       theme: 'dark-plus',

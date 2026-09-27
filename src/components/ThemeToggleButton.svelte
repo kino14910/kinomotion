@@ -40,33 +40,35 @@
       ? 'Switch to dark theme'
       : 'Switch to light theme'}
   >
-    {#if theme === 'light'}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-        />
-      </svg>
-    {:else}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-          clip-rule="evenodd"
-        />
-      </svg>
-    {/if}
+    {#key theme}
+      {#if theme === 'light'}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+          />
+        </svg>
+      {:else}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      {/if}
+    {/key}
   </button>
 </div>
 
@@ -74,66 +76,74 @@
   .theme-toggle {
     display: inline-flex;
     align-items: center;
-    padding: 0.33em 0.67em;
-    margin-left: 10px;
-    border-radius: 99em;
-    background-color: transparent;
+    margin-left: 12px;
   }
 
   .theme-button {
-    color: var(--on-surface-variant);
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border: none;
-    padding: 0.5em;
+    width: 42px;
+    height: 42px;
+    padding: 0;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border-radius: 50%;
+    background: var(--p5-ink);
+    color: var(--p5-paper);
+    border: 2px solid var(--p5-ink);
+    box-shadow: 0.2rem 0.2rem 0 var(--p5-red);
+    transform: skewX(-10deg);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      background-color 0.18s ease,
+      color 0.18s ease;
   }
 
   .theme-button:hover {
-    background-color: rgba(128, 128, 128, 0.1);
+    background: var(--p5-red);
+    color: var(--p5-white);
+    box-shadow: 0.3rem 0.3rem 0 var(--p5-ink);
+    transform: translate(-0.06rem, -0.06rem) skewX(-10deg);
   }
 
-  .theme-button:focus {
-    outline: 2px solid transparent;
+  .theme-button:focus-visible {
+    outline: 3px solid var(--p5-red);
+    outline-offset: 3px;
   }
 
   .theme-button svg {
     width: 20px;
     height: 20px;
+    transform: skewX(10deg);
+    animation: icon-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  :global(.theme-dark) .theme-toggle {
-    padding: 0.15em 0.4em;
+  @keyframes icon-pop {
+    from {
+      transform: skewX(10deg) rotate(-100deg) scale(0.4);
+      opacity: 0;
+    }
+    to {
+      transform: skewX(10deg) rotate(0deg) scale(1);
+      opacity: 1;
+    }
   }
 
   :global(.theme-dark) .theme-button {
-    width: 42px;
-    height: 42px;
     background: var(--p5-white);
     color: var(--p5-black);
-    border: 3px solid var(--primary);
-    border-radius: 0;
-    box-shadow: 0.18rem 0.18rem 0 var(--p5-black);
-    transform: skewX(-10deg);
+    border-color: var(--p5-red);
+    box-shadow: 0.2rem 0.2rem 0 var(--p5-red);
   }
 
   :global(.theme-dark) .theme-button:hover {
-    background: var(--primary);
+    background: var(--p5-red);
     color: var(--p5-white);
-    box-shadow: 0.28rem 0.28rem 0 var(--p5-white);
+    box-shadow: 0.3rem 0.3rem 0 var(--p5-white);
   }
 
   :global(.theme-dark) .theme-button:focus-visible {
-    outline: 3px solid var(--p5-white);
-    outline-offset: 3px;
-  }
-
-  :global(.theme-dark) .theme-button svg {
-    transform: skewX(10deg);
+    outline-color: var(--p5-white);
   }
 </style>

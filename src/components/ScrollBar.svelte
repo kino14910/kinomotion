@@ -173,8 +173,8 @@
   .track-container {
     --scrollbar-width: 16px;
     --thumb-visible-width: 8px;
-    --thumb-bg: rgba(136, 136, 136, 0.4);
-    --thumb-bg-active: var(--outline);
+    --thumb-bg: rgb(23 19 15 / 0.35);
+    --thumb-bg-active: var(--p5-red);
 
     position: fixed;
     right: 0;
@@ -186,6 +186,11 @@
     user-select: none;
     touch-action: pan-y;
     transition: opacity 0.3s;
+  }
+
+  :global(.theme-dark) .track-container {
+    --thumb-bg: rgb(255 255 255 / 0.3);
+    --thumb-bg-active: var(--p5-red);
   }
 
   .track-container:focus-visible {
@@ -212,7 +217,6 @@
     left: 50%;
     width: var(--thumb-visible-width);
     background: var(--thumb-bg);
-    border-radius: 10px;
     cursor: grab;
     translate: -50% 0;
     transition:
@@ -220,6 +224,10 @@
       width 0.15s,
       background 0.15s;
     will-change: transform;
+  }
+
+  :global(.theme-dark) .thumb {
+    border: 1px solid var(--p5-white);
   }
 
   .thumb.no-transition {

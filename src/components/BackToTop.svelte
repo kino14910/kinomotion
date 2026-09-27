@@ -41,53 +41,59 @@
     right: 2em;
     width: 48px;
     height: 48px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: white;
-    border: none;
+    background: var(--p5-ink);
+    color: var(--p5-paper);
+    border: 3px solid var(--p5-ink);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px) skewX(-10deg);
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease,
+      transform 0.3s ease,
+      background-color 0.18s ease,
+      color 0.18s ease,
+      box-shadow 0.18s ease;
+    box-shadow: 0.3rem 0.3rem 0 var(--p5-red);
     z-index: 9;
+
     &.visible {
       opacity: 1;
       visibility: visible;
-      transform: translateY(0);
+      transform: translateY(0) skewX(-10deg);
     }
+
     &:hover {
-      background: var(--primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      background: var(--p5-red);
+      color: var(--p5-white);
+      transform: translateY(-3px) skewX(-10deg);
+      box-shadow: 0.45rem 0.45rem 0 var(--p5-ink);
     }
+
     &:active {
-      transform: translateY(0);
+      transform: translateY(0) skewX(-10deg);
+    }
+
+    & svg {
+      transform: skewX(10deg);
     }
   }
 
   :global(.theme-dark) .back-to-top {
-    background: var(--primary);
+    background: var(--p5-red);
     color: var(--p5-white);
-    border: 3px solid var(--p5-white);
-    border-radius: 0;
-    box-shadow: 0.3rem 0.3rem 0 var(--p5-black);
-    transform: translateY(20px) skewX(-10deg);
-  }
-
-  :global(.theme-dark) .back-to-top.visible {
-    transform: translateY(0) skewX(-10deg);
+    border-color: var(--p5-white);
+    box-shadow: 0.3rem 0.3rem 0 var(--p5-white);
   }
 
   :global(.theme-dark) .back-to-top:hover {
     background: var(--p5-white);
     color: var(--p5-black);
-    box-shadow: 0.45rem 0.45rem 0 var(--primary);
-    transform: translateY(-2px) skewX(-10deg);
+    box-shadow: 0.45rem 0.45rem 0 var(--p5-red);
   }
 
   @media (max-width: 768px) {
