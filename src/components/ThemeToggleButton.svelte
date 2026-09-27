@@ -25,15 +25,63 @@
     }
   })
 
+  let buttonEl = $state(null)
+
   function toggleTheme() {
-    theme = theme === 'light' ? 'dark' : 'light'
-    localStorage.setItem('theme', theme)
+    const next = theme === 'light' ? 'dark' : 'light'
+    localStorage.setItem('theme', next)
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced || typeof document.startViewTransition !== 'function' || !buttonEl) {
+      theme = next
+      return
+    }
+
+    const rect = buttonEl.getBoundingClientRect()
+    const x = rect.left + rect.width / 2
+    const y = rect.top + rect.height / 2
+    const radius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    )
+
+    const transition = document.startViewTransition(() => {
+      document.documentElement.classList.add('vt-active')
+      document.documentElement.classList.toggle('theme-dark', next === 'dark')
+    })
+
+    theme = next
+
+    transition.finished
+      .catch(() => {})
+      .then(() => {
+        document.documentElement.classList.remove('vt-active')
+      })
+
+    transition.ready
+      .then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${radius}px at ${x}px ${y}px)`,
+            ],
+          },
+          {
+            duration: 500,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            pseudoElement: '::view-transition-new(root)',
+          },
+        )
+      })
+      .catch(() => {})
   }
 </script>
 
 <div class="theme-toggle">
   <button
     class="theme-button"
+    bind:this={buttonEl}
     onclick={toggleTheme}
     title={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
     aria-label={theme === 'light'

@@ -225,6 +225,19 @@
   color: var(--p5-white);
 }
 
+/* theme toggle circle reveal: keep both snapshots static, only clip the new one */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* suppress color fades while the theme snapshot is being captured */
+:root.vt-active,
+:root.vt-active * {
+  transition: none !important;
+}
+
 /* ---------- base ---------- */
 
 html {

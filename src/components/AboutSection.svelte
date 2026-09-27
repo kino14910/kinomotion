@@ -25,47 +25,48 @@
       })
 
       const tweens = []
+      const entrance = []
 
       if (!reduced) {
-        tweens.push(
-          gsap.from(split.chars, {
-            autoAlpha: 0,
-            duration: 0.01,
-            stagger: 0.004,
-            scrollTrigger: {
-              trigger: container.querySelector('.spec-block'),
-              start: 'top 88%',
-            },
-          }),
-        )
+        const charTween = gsap.from(split.chars, {
+          autoAlpha: 0,
+          duration: 0.01,
+          stagger: 0.004,
+          scrollTrigger: {
+            trigger: container.querySelector('.spec-block'),
+            start: 'top 88%',
+          },
+        })
+        tweens.push(charTween)
+        entrance.push(charTween)
 
-        tweens.push(
-          gsap.from(container.querySelector('.avatar-frame'), {
-            xPercent: -24,
-            rotate: -10,
-            autoAlpha: 0,
-            duration: 0.7,
-            ease: 'back.out(1.4)',
-            scrollTrigger: {
-              trigger: container,
-              start: 'top 78%',
-            },
-          }),
-        )
+        const avatarTween = gsap.from(container.querySelector('.avatar-frame'), {
+          xPercent: -24,
+          rotate: -10,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'back.out(1.4)',
+          scrollTrigger: {
+            trigger: container,
+            start: 'top 78%',
+          },
+        })
+        tweens.push(avatarTween)
+        entrance.push(avatarTween)
 
-        tweens.push(
-          gsap.from(container.querySelectorAll('.status-tag'), {
-            y: 26,
-            autoAlpha: 0,
-            duration: 0.4,
-            ease: 'power2.out',
-            stagger: 0.08,
-            scrollTrigger: {
-              trigger: container,
-              start: 'top 80%',
-            },
-          }),
-        )
+        const tagTween = gsap.from(container.querySelectorAll('.status-tag'), {
+          y: 26,
+          autoAlpha: 0,
+          duration: 0.4,
+          ease: 'power2.out',
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: container,
+            start: 'top 80%',
+          },
+        })
+        tweens.push(tagTween)
+        entrance.push(tagTween)
 
         tweens.push(
           gsap.to(container.querySelector('.about-ghost'), {
@@ -81,7 +82,20 @@
         )
       }
 
+      // 主题切换时把进行中的入场动画快进到底，保证 View Transition
+      // 新快照与真实文档绘制状态一致，圆形扫过的是稳定画面
+      const themeObserver = new MutationObserver(() => {
+        for (const t of entrance) {
+          if (t.progress() > 0 && t.progress() < 1) t.progress(1)
+        }
+      })
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class'],
+      })
+
       cleanup = () => {
+        themeObserver.disconnect()
         tweens.forEach(t => {
           t.scrollTrigger?.kill()
           t.kill()
@@ -204,7 +218,7 @@
   .about-title {
     margin: 0 0 2rem;
     display: flex;
-    gap: 0.2em;
+    gap: 0.4em;
     user-select: none;
     transform: rotate(-2deg);
   }
