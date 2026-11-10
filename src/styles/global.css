@@ -85,7 +85,6 @@
   --rays-color-2: var(--p5-paper);
   --rays-color-3: var(--p5-ink);
 
-  --font-family-serif: Merriweather, serif;
   --font-family-sans-code: 'Roboto Mono', monospace;
   --font-family-sans: 'MiSans', 'Roboto Mono', sans-serif;
   --font-family-display: 'Impact Regular', 'MiSans', Impact, sans-serif;
@@ -475,6 +474,23 @@ pre code,
   font-size: 0.92em;
   text-shadow: none;
 }
+
+/* Shiki dark-plus token colors：与内联 style 完全等值，仅减少重复 HTML 体积 */
+.tcd4d4d4 { color: #d4d4d4; }
+.tc9cdcfe { color: #9cdcfe; }
+.tc569cd6 { color: #569cd6; }
+.tcdcdcaa { color: #dcdcaa; }
+.tc6a9955 { color: #6a9955; }
+.tcce9178 { color: #ce9178; }
+.tc4ec9b0 { color: #4ec9b0; }
+.tcb5cea8 { color: #b5cea8; }
+.tc808080 { color: #808080; }
+.tcc586c0 { color: #c586c0; }
+.tc4fc1ff { color: #4fc1ff; }
+.tcc8c8c8 { color: #c8c8c8; }
+.tcd16969 { color: #d16969; }
+.tcd7ba7d { color: #d7ba7d; }
+.tcf44747 { color: #f44747; }
 
 :root.theme-dark pre {
   border-color: var(--p5-white);

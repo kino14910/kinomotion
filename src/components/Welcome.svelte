@@ -3,59 +3,35 @@
 
   let container = $state(null)
   let copyEl = $state(null)
-  let titleEl = $state(null)
-  let kickerEl = $state(null)
   let subEl = $state(null)
+
+  function splitChars(text, startIndex) {
+    return [...text].map((ch, i) => ({ ch, index: startIndex + i }))
+  }
+
+  const titleLines = [
+    { accent: false, chars: splitChars('KINO', 0) },
+    { accent: true, chars: splitChars('MOTION', 4) },
+  ]
   let slashEl = $state(null)
   let starEl = $state(null)
   let bgEl = $state(null)
 
   $effect(() => {
-    if (!container || !copyEl || !titleEl || !subEl) return
+    if (!container || !copyEl || !subEl) return
 
     let cancelled = false
     let cleanup
 
     ;(async () => {
-      const [{ default: gsap }, { ScrollTrigger }, { SplitText }] = await Promise.all([
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
         import('gsap'),
         import('gsap/ScrollTrigger'),
-        import('gsap/SplitText'),
       ])
       if (cancelled) return
-      gsap.registerPlugin(ScrollTrigger, SplitText)
+      gsap.registerPlugin(ScrollTrigger)
 
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      const split = new SplitText(titleEl.querySelectorAll('.title-line'), {
-        type: 'chars',
-        charsClass: 'hero-char',
-      })
-
-      let intro
-      if (!reduced) {
-        gsap.set(titleEl, { autoAlpha: 1 })
-        intro = gsap.timeline({ delay: 0.9 })
-        intro.from(split.chars, {
-          yPercent: 130,
-          rotate: 12,
-          autoAlpha: 0,
-          duration: 0.65,
-          ease: 'back.out(1.6)',
-          stagger: 0.045,
-        })
-        intro.from(
-          kickerEl,
-          { xPercent: -30, autoAlpha: 0, duration: 0.4, ease: 'power2.out' },
-          '-=0.35',
-        )
-        intro.from(
-          subEl,
-          { scale: 0, rotate: -8, autoAlpha: 0, duration: 0.45, ease: 'back.out(2.2)' },
-          '-=0.15',
-        )
-      } else {
-        gsap.set(titleEl, { autoAlpha: 1 })
-      }
 
       const tiltX = gsap.quickTo(copyEl, 'rotationY', { duration: 0.5, ease: 'power2.out' })
       const tiltY = gsap.quickTo(copyEl, 'rotationX', { duration: 0.5, ease: 'power2.out' })
@@ -119,12 +95,10 @@
       ScrollTrigger.refresh()
 
       cleanup = () => {
-        intro?.kill()
         ;[scrollTween, bgTween, slashTween].forEach(t => {
           t.scrollTrigger?.kill()
           t.kill()
         })
-        split.revert()
         window.removeEventListener('mousemove', onMouseMove)
         gsap.set([copyEl, bgEl, slashEl, starEl, subEl], { clearProps: 'all' })
       }
@@ -152,13 +126,13 @@
         <path d="M0,-44 C5,-9 9,-5 44,0 C9,5 5,9 0,44 C-5,9 -9,5 -44,0 C-9,-5 -5,-9 0,-44 Z" />
       </svg>
 
-      <p class="hero-kicker" bind:this={kickerEl}>
+      <p class="hero-kicker">
         <span>Take Your Heart — Interaction Lab</span>
       </p>
 
-      <h1 bind:this={titleEl} style="opacity:0">
-        <span class="title-line">KINO</span>
-        <span class="title-line accent">MOTION</span>
+      <h1 aria-label="KINO MOTION">
+        <span class="title-line">{#each titleLines[0].chars as char}<span class="hero-char" style={`--char-index:${char.index}`}>{char.ch}</span>{/each}</span>
+        <span class="title-line accent">{#each titleLines[1].chars as char}<span class="hero-char" style={`--char-index:${char.index}`}>{char.ch}</span>{/each}</span>
       </h1>
 
       <p class="hero-sub" bind:this={subEl}>
@@ -421,9 +395,68 @@
     margin-bottom: 2.2rem;
   }
 
+  .hero-kicker {
+    animation: hero-kicker-in 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.805s both;
+  }
+
+  .hero-sub {
+    animation: hero-sub-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 2.055s both;
+  }
+
   :global(.hero-char) {
     display: inline-block;
     will-change: transform;
+    animation:
+      hero-char-hide 0s 0.12s forwards,
+      hero-char-in 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.12s, calc(1.1s + var(--char-index) * 0.045s);
+  }
+
+  @keyframes hero-char-hide {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes hero-char-in {
+    from {
+      opacity: 0;
+      transform: translateY(130%) rotate(12deg);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) rotate(0);
+    }
+  }
+
+  @keyframes hero-kicker-in {
+    from {
+      opacity: 0;
+      transform: translateX(-30%) skewX(-12deg);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) skewX(-12deg);
+    }
+  }
+
+  @keyframes hero-sub-in {
+    from {
+      opacity: 0;
+      transform: scale(0) rotate(-8deg) skewX(-12deg);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0) skewX(-12deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-kicker,
+    .hero-sub,
+    :global(.hero-char) {
+      animation: none;
+    }
   }
 
   @media (max-width: 800px) {

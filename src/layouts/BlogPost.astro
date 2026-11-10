@@ -1,8 +1,10 @@
 ---
 import BackToTop from '@/components/BackToTop.svelte'
 import FormattedDate from '@/components/FormattedDate.svelte'
+import logo from '@/assets/logo.webp'
 import { SITE_TITLE } from '@/consts'
-import { Image } from 'astro:assets'
+import { getOgImage } from '@/lib/og-image'
+import { getImage, Image } from 'astro:assets'
 import type { MarkdownHeading } from 'astro'
 import Layout from './Layout.astro'
 
@@ -26,19 +28,21 @@ const {
   headings,
 } = Astro.props
 
-const filteredHeadings = headings?.filter(h => h.depth >= 2 && h.depth <= 3) || []
+const filteredHeadings = headings?.filter(h => h.depth >= 2 && h.depth <= 4) || []
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString()
-const imageURL = heroImage ? new URL(heroImage.src, Astro.site).toString() : ''
+const ogImage = await getOgImage(heroImage)
+const imageURL = new URL(ogImage.src, Astro.site).toString()
+const logoImage = await getImage({ src: logo, width: 112, height: 112, format: 'png' })
 const siteURL = Astro.site?.toString() ?? ''
-const logoURL = new URL('/favicon.ico', Astro.site).toString()
+const logoURL = new URL(logoImage.src, Astro.site).toString()
 
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": title,
   "description": description ?? title,
-  "image": imageURL ? [imageURL] : [],
+  "image": [imageURL],
   "datePublished": pubDate.toISOString(),
   "dateModified": updatedDate ? updatedDate.toISOString() : pubDate.toISOString(),
   "mainEntityOfPage": {
@@ -46,10 +50,10 @@ const articleSchema = {
     "@id": canonicalURL
   },
   "inLanguage": "zh-CN",
-  "keywords": tags?.join(', '),
+  "keywords": tags?.length ? tags.join(', ') : undefined,
   "author": {
-    "@type": "Organization",
-    "name": SITE_TITLE,
+    "@type": "Person",
+    "name": "Kino",
     "url": siteURL
   },
   "publisher": {
@@ -70,13 +74,13 @@ const breadcrumbSchema = {
     {
       "@type": "ListItem",
       "position": 1,
-      "name": "Home",
+      "name": "首页",
       "item": siteURL
     },
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Note",
+      "name": "技术笔记",
       "item": new URL('/note/', Astro.site).toString()
     },
     {
@@ -98,8 +102,10 @@ const breadcrumbSchema = {
   modifiedTime={updatedDate}
   tags={tags}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <Fragment slot='head'>
+    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
   <main>
     {
       filteredHeadings.length > 0 && (
@@ -396,7 +402,7 @@ const breadcrumbSchema = {
       : []
     const headings = Array.from(
       document.querySelectorAll<HTMLElement>(
-        '.prose h1[id], .prose h2[id], .prose h3[id]',
+        '.prose h1[id], .prose h2[id], .prose h3[id], .prose h4[id]',
       ),
     )
 

@@ -12,8 +12,8 @@
   let phase: Phase = $state('covering')
 
   const ENTER_DURATION = 600
-  const HOLD_DURATION = 400
-  const EXIT_DURATION = 800
+  const HOLD_DURATION = 280
+  const EXIT_DURATION = 720
 
   let timers: ReturnType<typeof setTimeout>[] = []
   let enterComplete = false

@@ -173,6 +173,7 @@
             src={card.src}
             alt="Poker Card"
             loading="lazy"
+            decoding="async"
             srcset={pokerSrcset(card.src)}
             sizes="(max-width: 520px) 160px, 240px"
           />
@@ -190,6 +191,7 @@
           src="/assets/pokers/poker-back.webp"
           alt="Poker Card Back"
           loading="lazy"
+          decoding="async"
           srcset="/assets/pokers/poker-back-480w.webp 480w, /assets/pokers/poker-back-320w.webp 320w, /assets/pokers/poker-back.webp 640w"
           sizes="(max-width: 520px) 160px, 240px"
         />

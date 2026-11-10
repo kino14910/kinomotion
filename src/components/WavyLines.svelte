@@ -3,11 +3,10 @@
 
   let container = $state(null)
   let canvasEl = $state(null)
+  let dotEl = $state(null)
   let ctx = null
   let width = $state(0)
   let height = $state(0)
-  let pointerX = $state(-10)
-  let pointerY = $state(0)
 
   let mouse = {
     x: -10,
@@ -23,7 +22,6 @@
   }
   let lines = []
   let noise = new Noise(Math.random())
-  let rafId
   let strokeColor = ''
 
   function readStrokeColor() {
@@ -63,15 +61,20 @@
     }
   }
 
+  function syncPointerDot() {
+    if (!dotEl) return
+    dotEl.style.setProperty('--x', `${mouse.sx}px`)
+    dotEl.style.setProperty('--y', `${mouse.sy}px`)
+  }
+
   function updatePhysics(time) {
     mouse.sx += (mouse.x - mouse.sx) * 0.1
     mouse.sy += (mouse.y - mouse.sy) * 0.1
-    pointerX = mouse.sx
-    pointerY = mouse.sy
+    syncPointerDot()
 
     const dx = mouse.x - mouse.lx
     const dy = mouse.y - mouse.ly
-    mouse.v = Math.hypot(dx, dy)
+    mouse.v = Math.sqrt(dx * dx + dy * dy)
     mouse.vs += (mouse.v - mouse.vs) * 0.1
     mouse.vs = Math.min(100, mouse.vs)
     mouse.lx = mouse.x
@@ -90,7 +93,7 @@
 
         const mdx = p.x - mouse.sx
         const mdy = p.y - mouse.sy
-        const dist = Math.hypot(mdx, mdy)
+        const dist = Math.sqrt(mdx * mdx + mdy * mdy)
         const limit = Math.max(175, mouse.vs)
 
         if (dist < limit) {
@@ -133,12 +136,6 @@
     ctx.stroke()
   }
 
-  function tick(time) {
-    updatePhysics(time)
-    drawLines()
-    rafId = requestAnimationFrame(tick)
-  }
-
   function updateMousePosition(pageX, pageY) {
     if (!container) return
     const rect = container.getBoundingClientRect()
@@ -169,7 +166,7 @@
 
   function onResize() {
     if (!canvasEl || !ctx) return
-    const dpr = window.devicePixelRatio || 1
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
     canvasEl.width = width * dpr
     canvasEl.height = height * dpr
     canvasEl.style.width = width + 'px'
@@ -198,10 +195,52 @@
   })
 
   $effect(() => {
-    rafId = requestAnimationFrame(tick)
+    if (!container) return
+
+    let rafId = 0
+    let running = false
+    let inView = true
+
+    function loop(time) {
+      if (!running) return
+      updatePhysics(time)
+      drawLines()
+      rafId = requestAnimationFrame(loop)
+    }
+
+    function start() {
+      if (running || !inView || document.hidden) return
+      running = true
+      rafId = requestAnimationFrame(loop)
+    }
+
+    function stop() {
+      running = false
+      cancelAnimationFrame(rafId)
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting
+        if (inView) start()
+        else stop()
+      },
+      { rootMargin: '200px' },
+    )
+
+    const onVisibilityChange = () => {
+      if (document.hidden) stop()
+      else start()
+    }
+
+    observer.observe(container)
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    start()
 
     return () => {
-      cancelAnimationFrame(rafId)
+      stop()
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', onVisibilityChange)
     }
   })
 </script>
@@ -216,9 +255,8 @@
   role="presentation"
 >
   <div
+    bind:this={dotEl}
     class="pointer-dot"
-    style:--x="{pointerX}px"
-    style:--y="{pointerY}px"
   ></div>
 
   <span class="wavy-word" aria-hidden="true">SIGNAL</span>
@@ -239,6 +277,8 @@
   }
 
   .pointer-dot {
+    --x: -10px;
+    --y: 0px;
     position: absolute;
     top: 0;
     left: 0;

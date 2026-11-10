@@ -3,17 +3,18 @@ import AboutSection from '@/components/AboutSection.svelte'
 import Carousel from '@/components/Carousel.svelte'
 import WavyLines from '@/components/WavyLines.svelte'
 import Welcome from '@/components/Welcome.svelte'
+import { SITE_DESCRIPTION } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 
-const title = "Kino Motion"
-const description = 'Frontend Interaction Lab by Kino'
+const title = 'Kino Motion'
+const description = SITE_DESCRIPTION
 ---
 
 <Layout title={title} description={description}>
   <Welcome client:load />
-  <AboutSection client:only />
-  <Carousel client:only />
-  <WavyLines client:only />
+  <AboutSection client:visible={{ rootMargin: '200px' }} />
+  <Carousel client:visible />
+  <WavyLines client:visible />
 </Layout>
 
 <style>

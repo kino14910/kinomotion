@@ -134,7 +134,14 @@
         <div class="reg-mark tr"></div>
         <div class="reg-mark bl"></div>
         <div class="reg-mark br"></div>
-        <img src="/assets/QQAvatar.webp" alt="Headshot of Kino" width="210" height="210" />
+        <img
+          src="/assets/QQAvatar.webp"
+          alt="Headshot of Kino"
+          width="210"
+          height="210"
+          loading="lazy"
+          decoding="async"
+        />
         <span class="avatar-label">Fig.01 — Portrait</span>
         <svg class="frame-star" viewBox="-50 -50 100 100" aria-hidden="true">
           <path d="M0,-44 C5,-9 9,-5 44,0 C9,5 5,9 0,44 C-5,9 -9,5 -44,0 C-9,-5 -5,-9 0,-44 Z" />

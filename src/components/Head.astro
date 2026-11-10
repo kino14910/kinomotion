@@ -1,8 +1,8 @@
 ---
 import type { ImageMetadata } from 'astro'
 import { ClientRouter } from 'astro:transitions'
-import FallbackImage from '../assets/cg_rm18_0103.webp'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
+import { getOgImage, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from '../lib/og-image'
 import '../styles/fonts.css'
 import '../styles/global.css'
 
@@ -21,7 +21,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString()
 const {
   title,
   description,
-  image = FallbackImage,
+  image,
   type = 'website',
   publishedTime,
   modifiedTime,
@@ -29,8 +29,10 @@ const {
 } = Astro.props
 
 const metaDescription = description ?? SITE_DESCRIPTION
-const imageURL = new URL(image.src, Astro.site).toString()
+const ogImage = await getOgImage(image)
+const imageURL = new URL(ogImage.src, Astro.site).toString()
 const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === ''
+const isNotePage = Astro.url.pathname.startsWith('/note')
 const pageTitle = isHomePage
   ? `${SITE_TITLE} - 前端交互实验室`
   : `${title} | ${SITE_TITLE}`
@@ -40,8 +42,10 @@ const pageTitle = isHomePage
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#111111" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<meta name="author" content={SITE_TITLE} />
-<link rel="icon" href="/favicon.ico" />
+<meta name="author" content="Kino" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-index.xml" />
 <link
   rel="alternate"
   type="application/rss+xml"
@@ -52,44 +56,26 @@ const pageTitle = isHomePage
 
 <link
   rel="preload"
-  href="/fonts/Merriweather_24pt-Regular-subset.woff2"
-  as="font"
-  type="font/woff2"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="/fonts/Merriweather_24pt-SemiBold-subset.woff2"
-  as="font"
-  type="font/woff2"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="/fonts/RobotoMono-VariableFont_wght-subset.woff2"
-  as="font"
-  type="font/woff2"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="/fonts/MiSans VF-subset.woff2"
-  as="font"
-  type="font/woff2"
-  crossorigin
-/>
-<link
-  rel="preload"
   href="/fonts/unicode.impact.woff"
   as="font"
   type="font/woff"
   crossorigin
 />
+{
+  isNotePage && (
+    <link
+      rel="preload"
+      href="/fonts/MiSans-VF-cjk-subset.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  )
+}
 
 <link rel="canonical" href={canonicalURL} />
 
 <title>{pageTitle}</title>
-<meta name="title" content={pageTitle} />
 <meta name="description" content={metaDescription} />
 
 <meta property="og:type" content={type} />
@@ -99,8 +85,9 @@ const pageTitle = isHomePage
 <meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={metaDescription} />
 <meta property="og:image" content={imageURL} />
-<meta property="og:image:width" content={String(image.width)} />
-<meta property="og:image:height" content={String(image.height)} />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content={String(OG_IMAGE_WIDTH)} />
+<meta property="og:image:height" content={String(OG_IMAGE_HEIGHT)} />
 <meta property="og:image:alt" content={title} />
 
 {type === 'article' && publishedTime && (
@@ -113,7 +100,7 @@ const pageTitle = isHomePage
   <meta property="article:tag" content={tag} />
 ))}
 {type === 'article' && (
-  <meta property="article:author" content={SITE_TITLE} />
+  <meta property="article:author" content="Kino" />
 )}
 
 <meta name="twitter:card" content="summary_large_image" />
